@@ -1,5 +1,5 @@
 import { User } from "../db/db-entities/user.entity";
-import { genSaltSync, hashSync } from "bcrypt";
+import { compare, compareSync, genSaltSync, hashSync } from "bcrypt";
 import UserService from "../users/user.service";
 import decryptPassword from "../common/utils/decryptPassword";
 import { Credentials } from "./auth.interface";
@@ -20,20 +20,19 @@ class AuthService {
             let token: string = '';
 
             if (isObject<object>(user)) {
-
-                // D O N T  F O R G E T  T H A T ! ! ! !
-                // It's should work when the frontEnd will be connected.
-                // if (!compareSync(decryptPassword(credentials.password), user.password)) return false;
+                console.log(compareSync(credentials.password, user.password))
+                // NOTE: Use this !compareSync(decryptPassword(credentials.password, user.password)) when you have an encryption in the frontEnd.
+                if (!compareSync(credentials.password, user.password)) return false;
 
                 const userCredentials = {
                     email: user.email,
                     password: user.password
                 };
-                const privateKey: string = readFileSync("rsaKeys/private.pem", "utf8");
-                token = sign(userCredentials, privateKey, {algorithm: "RS512"});
+                console.log(user);
+                // const privateKey: string = readFileSync("rsaKeys/private.pem", "utf8");
+                token = sign(userCredentials, "privateKey", {algorithm: "RS512"});
+                if (typeof token !== "string" && !token) return false;
             }
-            if (typeof token !== "string" && !token) return false;
-
             return token;
         } catch (err) {
             console.warn(err)
@@ -44,7 +43,8 @@ class AuthService {
     public async signUp(user: User): Promise<boolean | string[]>  {
         try {
             const encryptPass: string = user.password;
-            const decryptPass: string = decryptPassword(encryptPass);
+            // NOTE: Use this decryptPassword(encryptPass) when you have an encryption in the frontEnd.
+            const decryptPass: string = encryptPass;
             const salt: string = genSaltSync(10);
             if (typeof decryptPass === "string" && decryptPass) user.password = hashSync(decryptPass, salt);
             else return false;

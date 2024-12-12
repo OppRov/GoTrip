@@ -1,10 +1,11 @@
-import { IsBoolean, IsEmail, IsMobilePhone, IsPhoneNumber, IsString, IsStrongPassword } from "class-validator";
+import { IsBoolean, IsEmail, IsEnum, IsMobilePhone, IsPhoneNumber, IsString, IsStrongPassword } from "class-validator";
 import { Entity, PrimaryGeneratedColumn, Column, ObjectIdColumn } from "typeorm"
+import { roles } from "../../common/enums/roles";
 
 @Entity()
 export class User {
-    @ObjectIdColumn()
-    objID: number;
+    @ObjectIdColumn({ primary: true })
+    _id: string;
 
     @Column()
     @IsString()
@@ -15,11 +16,6 @@ export class User {
     lastName: string;
 
     @Column()
-    @IsMobilePhone()
-    @IsPhoneNumber("IL")
-    phoneNumber: string;
-
-    @Column()
     @IsStrongPassword()
     password: string;
 
@@ -27,7 +23,8 @@ export class User {
     @IsEmail()
     email: string;
 
-    @Column()
-    @IsBoolean()
-    isActive: boolean;
+    // FIXME: Change this to be default "user" and block the end user of Signup to give himself a role.
+    @Column({ default: "user" })
+    @IsEnum(roles)
+    role: string;
 }

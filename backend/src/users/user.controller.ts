@@ -29,7 +29,7 @@ class UserController {
                 const users: [] | User[] = await this.service.findAllUsers()
                 this.innerResponse.data = users;
                 this.innerResponse.message = "Success";
-                if (!users.length) throw new Error("There is no users").message
+                if (!users.length) throw new Error("There is no users");
                 res.status(this.innerResponse.status).send(this.innerResponse);
             } catch (err) {
                 this.innerResponse.message = err?.toString()!;
@@ -45,11 +45,11 @@ class UserController {
                 const user: User | boolean = await this.service.findOneUser(req.params.email)
                 this.innerResponse.data = user;
                 this.innerResponse.message = "Success";
-                if (!user) throw new Error("User not found").message;
+                if (!user) throw new Error("User not found");
                 res.status(this.innerResponse.status = HttpStatus.OK).send(this.innerResponse);
             } catch (err) {
                 this.innerResponse.message = err?.toString()!;
-                res.status(this.innerResponse.status = HttpStatus.NO_CONTENT).send(this.innerResponse);
+                res.status(this.innerResponse.status = HttpStatus.NOT_FOUND).send(this.innerResponse);
             }
         });
     }
@@ -60,7 +60,7 @@ class UserController {
                 const user: User | boolean | string[] = await this.service.createUser(req.body);
                 this.innerResponse.data = user;
                 this.innerResponse.message = "User Created successfully";
-                if (Array.isArray(user) && user.length > 0|| !user) throw new Error("An error occurred").message;
+                if (Array.isArray(user) && user.length > 0 || !user) throw new Error("An error occurred");
                 res.status(this.innerResponse.status = HttpStatus.CREATED).send(this.innerResponse);
             }
             catch (err) {
