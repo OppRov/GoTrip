@@ -1,13 +1,16 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
+import HomePage from "../pages/HomePage";
 
 const AppRoutes = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<ResponsiveAppBar />}></Route>
+          <Route path="/" element={<ResponsiveAppBar />}>
+            <Route path="/" element={<HomePage />} />
+          </Route>
           <Route path="/login" element={<h1>Login</h1>} />
         </Routes>
       </BrowserRouter>

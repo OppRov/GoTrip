@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { userContext } from "../contexts/userContext";
 
-const useFetchUser = () => {
+const useFetchUser = ({ url, initialValue }) => {
   const [user, setUser] = useContext(userContext);
   const [loading, setLoading] = useState(true);
 
