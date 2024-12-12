@@ -20,7 +20,6 @@ class AuthService {
             let token: string = '';
 
             if (isObject<object>(user)) {
-                console.log(compareSync(credentials.password, user.password))
                 // NOTE: Use this !compareSync(decryptPassword(credentials.password, user.password)) when you have an encryption in the frontEnd.
                 if (!compareSync(credentials.password, user.password)) return false;
 
