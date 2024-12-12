@@ -4,9 +4,6 @@ import { ThemeProvider } from "@emotion/react";
 import { theme } from "./themes/AppTheme";
 
 import AppRoutes from "./routes/AppRoutes";
-import dotenv from "dotenv";
-
-// dotenv.config();
 
 function App() {
   return (
