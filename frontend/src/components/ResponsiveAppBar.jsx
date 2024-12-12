@@ -1,4 +1,3 @@
-import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,13 +11,11 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 
 import { useState } from "react";
-import { Skeleton } from "@mui/material";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../hooks/useUserContext";
-import { systemColors } from "../themes/SystemColors";
 
 const pages = ["My Trips", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Logout"];
@@ -40,9 +37,9 @@ function ResponsiveAppBar() {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = (e) => {
-    const id = e.currentTarget.id;
-
+  const handleCloseNavMenu = () => {
+    // It been comment because it unused.
+    // const id = e.currentTarget.id;
     setAnchorElNav(null);
   };
 
