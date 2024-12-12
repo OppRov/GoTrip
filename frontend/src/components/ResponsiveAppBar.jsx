@@ -14,8 +14,8 @@ import MenuItem from "@mui/material/MenuItem";
 
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../hooks/useUserContext";
-import { systemColors } from "../contexts/colorContext";
 
 const pages = ["My Trips", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Logout"];
@@ -25,26 +25,36 @@ function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
+  const nav = useNavigate();
+
   const { user } = useUserContext();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
+    console.log("open", event.currentTarget.id);
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
+    // It been comment because it unused.
+    // const id = e.currentTarget.id;
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (e) => {
+    const id = e.currentTarget.id;
+    console.log(id);
+
+    if (id === "Login") nav("/login");
+    else if (id === "Register") nav("/register");
     setAnchorElUser(null);
   };
 
   return (
     <>
-      <AppBar sx={{ backgroundColor: systemColors.primary }} position="static">
+      <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <ModeOfTravelIcon
@@ -52,10 +62,11 @@ function ResponsiveAppBar() {
             />
             {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
             <Typography
+              onClick={() => nav("/")}
               variant="h6"
               noWrap
               component="a"
-              href="#app-bar-with-responsive-menu"
+              // href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -68,7 +79,7 @@ function ResponsiveAppBar() {
             >
               GOTRIP
             </Typography>
-
+            {/* For small screens */}
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
@@ -97,7 +108,7 @@ function ResponsiveAppBar() {
                 sx={{ display: { xs: "block", md: "none" } }}
               >
                 {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <MenuItem key={page} id={page} onClick={handleCloseNavMenu}>
                     <Typography sx={{ textAlign: "center" }}>{page}</Typography>
                   </MenuItem>
                 ))}
@@ -108,6 +119,7 @@ function ResponsiveAppBar() {
             />
             {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
             <Typography
+              onClick={() => nav("/")}
               variant="h5"
               noWrap
               component="a"
@@ -125,10 +137,12 @@ function ResponsiveAppBar() {
             >
               GOTRIP
             </Typography>
+            {/* For medium and large screens */}
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
                 <Button
                   key={page}
+                  id={page}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: "white", display: "block" }}
                 >
@@ -174,14 +188,22 @@ function ResponsiveAppBar() {
               >
                 {user
                   ? settings.map((setting) => (
-                      <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      <MenuItem
+                        key={setting}
+                        id={setting}
+                        onClick={handleCloseUserMenu}
+                      >
                         <Typography sx={{ textAlign: "center" }}>
                           {setting}
                         </Typography>
                       </MenuItem>
                     ))
                   : logging.map((log) => (
-                      <MenuItem key={log} onClick={handleCloseUserMenu}>
+                      <MenuItem
+                        key={log}
+                        id={log}
+                        onClick={handleCloseUserMenu}
+                      >
                         <Typography sx={{ textAlign: "center" }}>
                           {log}
                         </Typography>
