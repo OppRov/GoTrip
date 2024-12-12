@@ -1,4 +1,3 @@
-import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,10 +11,8 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 
 import { useState } from "react";
-import { Skeleton } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { useUserContext } from "../hooks/useUserContext";
 import { systemColors } from "../contexts/colorContext";
