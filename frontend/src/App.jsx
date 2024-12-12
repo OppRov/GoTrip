@@ -1,12 +1,16 @@
-import './App.css'
+import "./App.css";
+import { UserProvider } from "./contexts/userContext";
+
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
-
   return (
     <>
-      
+      <UserProvider>
+        <AppRoutes />
+      </UserProvider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
