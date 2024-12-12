@@ -17,6 +17,7 @@ class Middleware {
 
     public authMiddleware(): void {
         const token: string = this.req.headers.authorization?.split(' ')[1] || '';
+        // Use it when encrytion work on frontend
         // const publicKey: string = readFileSync("rsaKeys/public.pem", "utf8");
         try {
             if (this.req.originalUrl.includes("signIn") || this.req.originalUrl.includes("signUp") || verify(token, "publicKey")) return this.next();
