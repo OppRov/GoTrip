@@ -17,9 +17,9 @@ class Middleware {
 
     public authMiddleware(): void {
         const token: string = this.req.headers.authorization?.split(' ')[1] || '';
-        const publicKey: string = readFileSync("rsaKeys/public.pem", "utf8");
+        // const publicKey: string = readFileSync("rsaKeys/public.pem", "utf8");
         try {
-            if (this.req.originalUrl.includes("signIn") || this.req.originalUrl.includes("signUp") || verify(token, publicKey)) return this.next();
+            if (this.req.originalUrl.includes("signIn") || this.req.originalUrl.includes("signUp") || verify(token, "publicKey")) return this.next();
         } catch(error: any) {
             const response: InnerResponse = {
                 message: "ERROR: [UNAUTHORIZED]",

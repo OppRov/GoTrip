@@ -16,7 +16,7 @@ class AuthController {
         this.innerResponse = {
             message: "Success",
             status: HttpStatus.OK,
-            data: null,
+            data: null
         };
       this.ROUTE_NAME = routeName;
     }
@@ -25,14 +25,15 @@ class AuthController {
         this.app.post(`/${this.ROUTE_NAME}/signIn`, async (req: Request, res: Response) => {
             try {
                 const token: string | boolean = await this.service.signIn(req.body);
+                if (typeof token !== "string" && !token) throw new Error("An error occurred");
 
-                if (typeof token === "string") this.innerResponse.data = token;
-
+                this.innerResponse.message = "You signin was successfully";
+                this.innerResponse.data = { token };
                 res.status(this.innerResponse.status).send(this.innerResponse);
             } catch (err) {
                 this.innerResponse.message = err?.toString()!;
                 this.innerResponse.data = null;
-                res.status(this.innerResponse.status = HttpStatus.NO_CONTENT).send(this.innerResponse);
+                res.status(this.innerResponse.status = HttpStatus.NOT_FOUND).send(this.innerResponse);
             }
         });
     }
@@ -41,11 +42,10 @@ class AuthController {
         this.app.post(`/${this.ROUTE_NAME}/signUp`, async (req: Request, res: Response) => {
             try {
                 const user: boolean | string[] = await this.service.signUp(req.body);
-                this.innerResponse.data = user;
+                if (Array.isArray(user) && user.length > 0 || !user) throw new Error("An error occurred");
+
                 this.innerResponse.message = "You signup was successfully";
-
-                if (Array.isArray(user) && user.length > 0 || !user) throw new Error("An error occurred").message;
-
+                this.innerResponse.data = user;
                 res.status(this.innerResponse.status = HttpStatus.CREATED).send(this.innerResponse);
             } catch (err) {
                 this.innerResponse.message = err?.toString()!;

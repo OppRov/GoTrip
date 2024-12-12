@@ -2,6 +2,7 @@ import { User } from "../db/db-entities/user.entity";
 import { AppDataSource } from "../db/db-config";
 import { EntityManager } from "typeorm";
 import entityValidation from "../common/utils/entityValidation";
+import { roles } from "../common/enums/roles";
 
 class UserService {
 
