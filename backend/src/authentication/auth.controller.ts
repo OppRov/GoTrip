@@ -48,10 +48,10 @@ class AuthController {
         this.app.post(`/${this.ROUTE_NAME}/signUp`, async (req: Request, res: Response) => {
             try {
                 const user: boolean | string[] = await this.service.signUp(req.body);
+                this.innerResponse.data = user;
                 if (Array.isArray(user) && user.length > 0 || !user) throw new Error("An error occurred");
 
                 this.innerResponse.message = "You signup was successfully";
-                this.innerResponse.data = user;
                 res.status(this.innerResponse.status = HttpStatus.CREATED).send(this.innerResponse);
             } catch (err) {
                 this.innerResponse.message = err?.toString()!;
