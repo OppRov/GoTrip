@@ -4,6 +4,8 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { SIGNUP_URL } from "../../constants/endpoints";
+import axiosFetch from "../api/axiosFetch";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +13,11 @@ const SignupForm = () => {
     lastName: "",
     email: "",
     password: "",
+    role: "user",
+  });
+  const { data, loading, error, fetchData } = axiosFetch({
+    url: SIGNUP_URL,
+    method: "POST",
   });
 
   const handleChange = (e) => {
@@ -24,6 +31,8 @@ const SignupForm = () => {
     e.preventDefault();
     // Handle form submission here, e.g., send data to a server
     console.log(formData);
+    fetchData(formData);
+    console.log(data, loading, error);
   };
 
   return (

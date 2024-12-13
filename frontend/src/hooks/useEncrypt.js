@@ -1,6 +1,6 @@
 import JSEncrypt from "jsencrypt";
 
-const publicKey = `-----BEGIN PUBLIC KEY-----\n${process.env.PUBLIC_KEY}\n-----END PUBLIC KEY-----`;
+const publicKey = `${import.meta.env.VITE_PUBLIC_KEY}`;
 
 export const useEncrypt = (data) => {
   const encrypt = new JSEncrypt();

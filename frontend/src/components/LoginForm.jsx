@@ -3,15 +3,24 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import React, { useState } from "react";
 import { Typography } from "@mui/material";
+import axiosFetch from "../api/axiosFetch";
+import { LOGIN_URL } from "../../constants/endpoints";
+import axios from "axios";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { data, loading, error, fetchData } = axiosFetch({
+    url: LOGIN_URL,
+    method: "POST",
+  });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("Email:", email);
     console.log("Password:", password);
+    await fetchData({ email, password });
+    console.log(data, loading, error);
   };
 
   return (
