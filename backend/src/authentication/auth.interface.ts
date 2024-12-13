@@ -3,6 +3,6 @@ export interface Credentials {
     password: string;
 }
 export interface CredentialsStatus {
-    usernameOK: boolean;
+    emailOK: boolean;
     passwordOK: boolean;
 }
