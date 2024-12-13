@@ -28,7 +28,7 @@ class AuthController {
             try {
                 const token: string | CredentialsStatus = await this.service.signIn(req.body);
                 if (isObject<CredentialsStatus>(token)) {
-                    if (!token.usernameOK) throw new Error("Username not exist");
+                    if (!token.emailOK) throw new Error("Email not exist");
                     throw new Error("Invalid password");
                 }
                 if (typeof token !== "string" && !token) throw new Error("An error occurred");

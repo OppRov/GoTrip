@@ -17,7 +17,7 @@ class AuthService {
 
     public async signIn(credentials: Credentials): Promise<string | CredentialsStatus> {
         const credentialsStatus: CredentialsStatus = {
-            usernameOK: true,
+            emailOK: true,
             passwordOK: true
         };
         try {
@@ -25,7 +25,7 @@ class AuthService {
             let token: string = '';
 
             if (!isObject<object>(user)) {
-                credentialsStatus.usernameOK = false;
+                credentialsStatus.emailOK = false;
                 return credentialsStatus;
             };
             // NOTE: Use this !compareSync(decryptPassword(credentials.password, user.password)) when you have an encryption in the frontEnd.
@@ -40,14 +40,14 @@ class AuthService {
             const privateKey: string = readFileSync("RSA-keys/private.pem", "utf8");
             token = sign(userCredentials, privateKey, {algorithm: "RS512"});
             if (typeof token !== "string" && !token) {
-                credentialsStatus.usernameOK = false;
+                credentialsStatus.emailOK = false;
                 credentialsStatus.passwordOK = false;
                 return credentialsStatus;
             }
             return token;
         } catch (err) {
             console.warn(err)
-            credentialsStatus.usernameOK = false;
+            credentialsStatus.emailOK = false;
             credentialsStatus.passwordOK = false;
             return credentialsStatus;
         }

@@ -1,5 +1,5 @@
-import { IsBoolean, IsEmail, IsEnum, IsMobilePhone, IsPhoneNumber, IsString, IsStrongPassword } from "class-validator";
-import { Entity, PrimaryGeneratedColumn, Column, ObjectIdColumn } from "typeorm"
+import { IsEmail, IsEnum, IsString, IsStrongPassword } from "class-validator";
+import { Column, Entity, ObjectIdColumn } from "typeorm";
 import { roles } from "../../common/enums/roles";
 
 @Entity()
