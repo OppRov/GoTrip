@@ -6,7 +6,7 @@ import { Credentials } from "./auth.interface";
 import { sign } from "jsonwebtoken";
 import { isObject } from "class-validator";
 import { readFileSync } from "fs";
-import { CredentialsStatus } from "../common/interfaces/credentialsStatus.interface";
+import { CredentialsStatus } from "./auth.interface";
 
 class AuthService {
     usresService: UserService;

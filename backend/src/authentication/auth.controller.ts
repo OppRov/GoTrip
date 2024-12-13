@@ -2,7 +2,7 @@ import { Express, Request, Response } from "express";
 import AuthService from "./auth.service";
 import { HttpStatus } from "../common/enums/http-status";
 import { InnerResponse } from "../common/interfaces/response.interface";
-import { CredentialsStatus } from "../common/interfaces/credentialsStatus.interface";
+import { CredentialsStatus } from "./auth.interface";
 import { isObject } from "class-validator";
 
 class AuthController {
