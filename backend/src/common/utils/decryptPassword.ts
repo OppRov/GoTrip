@@ -4,7 +4,7 @@ import crypto from "crypto";
 
 export default (password: string): string => {
     try {
-        const privateKey: string = readFileSync("rsaKeys/private.pem", "utf8");
+        const privateKey: string = readFileSync("RSA-keys/private.pem", "utf8");
         const decryptedPassword: Buffer = crypto.privateDecrypt(
             {
                 key: privateKey,

@@ -2,6 +2,8 @@ import { Express, Request, Response } from "express";
 import AuthService from "./auth.service";
 import { HttpStatus } from "../common/enums/http-status";
 import { InnerResponse } from "../common/interfaces/response.interface";
+import { CredentialsStatus } from "../common/interfaces/credentialsStatus.interface";
+import { isObject } from "class-validator";
 
 class AuthController {
 
@@ -24,10 +26,14 @@ class AuthController {
     public signIn(): void {
         this.app.post(`/${this.ROUTE_NAME}/signIn`, async (req: Request, res: Response) => {
             try {
-                const token: string | boolean = await this.service.signIn(req.body);
+                const token: string | CredentialsStatus = await this.service.signIn(req.body);
+                if (isObject<CredentialsStatus>(token)) {
+                    if (!token.usernameOK) throw new Error("Username not exist");
+                    throw new Error("Invalid password");
+                }
                 if (typeof token !== "string" && !token) throw new Error("An error occurred");
 
-                this.innerResponse.message = "You signin was successfully";
+                this.innerResponse.message = "You signin successfully";
                 this.innerResponse.data = { token };
                 res.status(this.innerResponse.status).send(this.innerResponse);
             } catch (err) {

@@ -23,7 +23,6 @@ export class User {
     @IsEmail()
     email: string;
 
-    // FIXME: Change this to be default "user" and block the end user of Signup to give himself a role.
     @Column({ default: "user" })
     @IsEnum(roles)
     role: string;
