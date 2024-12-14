@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { Typography } from "@mui/material";
 import axiosFetch from "../api/axiosFetch";
 import { LOGIN_URL } from "../../constants/endpoints";
-import axios from "axios";
+import { useForm } from "react-hook-form";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -14,13 +14,23 @@ function LoginForm() {
     url: LOGIN_URL,
     method: "POST",
   });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    mode: "onChange",
+  });
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const submit = async () => {
     console.log("Email:", email);
     console.log("Password:", password);
     await fetchData({ email, password });
-    console.log(data, loading, error);
+    console.log("Data:", data, "Loading:", loading, "Error:", error);
   };
 
   return (
@@ -43,10 +53,18 @@ function LoginForm() {
       <Typography component="h1" variant="h5">
         Login
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+      <Box component="form" onSubmit={handleSubmit(submit)} sx={{ mt: 3 }}>
         <TextField
+          {...register("email", {
+            required: "Email is required",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Invalid email address",
+            },
+          })}
+          error={!!errors.email}
+          helperText={errors.email?.message}
           margin="normal"
-          required
           fullWidth
           id="email"
           label="Email Address"
@@ -57,8 +75,12 @@ function LoginForm() {
           onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
+          {...register("password", {
+            required: "Password is required",
+          })}
+          error={!!errors.password}
+          helperText={errors.password?.message}
           margin="normal"
-          required
           fullWidth
           name="password"
           label="Password"
