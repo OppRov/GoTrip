@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function axiosFetch({ url, method }) {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchData = async (body) => {
@@ -13,8 +13,8 @@ export default function axiosFetch({ url, method }) {
       const response = await axios[method.toLowerCase()](url, body);
       setData(response.data);
     } catch (err) {
-      console.log(err);
       setError(err.response.data);
+      setData(null);
     } finally {
       setLoading(false);
     }
