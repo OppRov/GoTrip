@@ -35,7 +35,7 @@ class AuthController {
 
                 this.innerResponse.message = "You signin successfully";
                 this.innerResponse.data = { token };
-                res.status(this.innerResponse.status).send(this.innerResponse);
+                res.status(this.innerResponse.status = HttpStatus.OK).send(this.innerResponse);
             } catch (err) {
                 this.innerResponse.message = err?.toString()!;
                 this.innerResponse.data = null;
