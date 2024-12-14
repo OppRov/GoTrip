@@ -68,6 +68,9 @@ function ResponsiveAppBar() {
               component="a"
               // href="#app-bar-with-responsive-menu"
               sx={{
+                "&:hover": {
+                  cursor: "pointer",
+                },
                 mr: 2,
                 display: { xs: "none", md: "flex" },
                 fontFamily: "monospace",
