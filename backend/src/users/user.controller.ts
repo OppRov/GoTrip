@@ -3,6 +3,7 @@ import UserService from "./user.service";
 import { HttpStatus } from "../common/enums/http-status";
 import { InnerResponse } from "../common/interfaces/response.interface";
 import { User } from "../db/db-entities/user.entity";
+import { isArray } from "class-validator";
 
 // @Auth(true)
 class UserController {
@@ -57,10 +58,13 @@ class UserController {
     public createUser(): void {
         this.app.post(`/${this.ROUTE_NAME}`, async (req: Request, res: Response) => {
             try {
-                const user: User | boolean | string[] = await this.service.createUser(req.body);
+                const user: boolean | string[] | [boolean, string] = await this.service.createUser(req.body);
                 this.innerResponse.data = user;
-                this.innerResponse.message = "User Created successfully";
-                if (Array.isArray(user) && user.length > 0 || !user) throw new Error("An error occurred");
+                if (isArray(user) && user.length > 0) {
+                    if (typeof user[0] === "boolean") throw new Error(user[1]);
+                    throw new Error("An error occurred");
+                }
+                this.innerResponse.message = "User created successfully";
                 res.status(this.innerResponse.status = HttpStatus.CREATED).send(this.innerResponse);
             }
             catch (err) {

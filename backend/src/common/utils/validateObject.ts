@@ -1,7 +1,7 @@
 import { ValidationError, validate } from "class-validator";
 import { Entity } from "../types/entities";
 
-export default async (data: Entity): Promise<[] | string[]> => {
+export default async function validateObject(data: object): Promise<[] | string[]> {
 
     const validateUser: ValidationError[] = await validate(data);
 
