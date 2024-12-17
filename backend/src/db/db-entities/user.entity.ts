@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsString, IsStrongPassword } from "class-validator";
+import { IsEmail, IsEnum, IsHash, IsString, IsStrongPassword } from "class-validator";
 import { Column, Entity, ObjectIdColumn } from "typeorm";
 import { roles } from "../../common/enums/roles";
 
@@ -15,11 +15,11 @@ export class User {
     @IsString()
     lastName: string;
 
-    @Column()
+    @Column({ select: false })
     @IsStrongPassword()
     password: string;
 
-    @Column()
+    @Column({ unique: true })
     @IsEmail()
     email: string;
 
