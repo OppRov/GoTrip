@@ -3,7 +3,8 @@ import { createTheme } from "@mui/material";
 export const theme = createTheme({
   palette: {
     primary: {
-      main: "#F1671A",
+      main: "#f1671A",
+      light: "#F07936",
     },
     secondary: {
       main: "#696969",
@@ -13,6 +14,17 @@ export const theme = createTheme({
     },
     quaternary: {
       main: "#FFFFFF",
+    },
+  },
+  components: {
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderWidth: "2px",
+          },
+        },
+      },
     },
   },
 });
