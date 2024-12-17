@@ -58,7 +58,7 @@ function LoginForm() {
         if (error) setSnackMsg(error);
         else {
           setUser(data.data.userInfo);
-          localStorage.setItem("userInfo", data.data.userInfo);
+          localStorage.setItem("userInfo", JSON.stringify(data.data.userInfo));
           localStorage.setItem("token", data.data.token);
           setSnackMsg("Login Successful");
           setTimeout(() => {

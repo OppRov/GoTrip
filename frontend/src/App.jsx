@@ -2,16 +2,20 @@ import "./App.css";
 import { UserProvider } from "./contexts/userContext";
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "./themes/AppTheme";
+import { NextUiProvider } from "@nextui-org/react";
 
 import AppRoutes from "./routes/AppRoutes";
+import Stages from "./components/planner/Stages";
 
 function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <UserProvider>
-          <AppRoutes />
-        </UserProvider>
+        <NextUiProvider>
+          <UserProvider>
+            <AppRoutes />
+          </UserProvider>
+        </NextUiProvider>
       </ThemeProvider>
     </>
   );
