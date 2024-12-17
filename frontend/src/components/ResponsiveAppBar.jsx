@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../hooks/useUserContext";
@@ -27,7 +27,7 @@ function ResponsiveAppBar() {
 
   const nav = useNavigate();
 
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -45,10 +45,14 @@ function ResponsiveAppBar() {
 
   const handleCloseUserMenu = (e) => {
     const id = e.currentTarget.id;
-    console.log(id);
 
     if (id === "Login") nav("/login");
-    else if (id === "Register") nav("/register");
+    else if (id === "Register") nav("/signup");
+    else if (id === "Logout") {
+      localStorage.removeItem("userInfo");
+      nav("/");
+      setUser(null);
+    }
     setAnchorElUser(null);
   };
 
@@ -57,31 +61,6 @@ function ResponsiveAppBar() {
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <ModeOfTravelIcon
-              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-            />
-            {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
-            <Typography
-              onClick={() => nav("/")}
-              variant="h6"
-              noWrap
-              component="a"
-              // href="#app-bar-with-responsive-menu"
-              sx={{
-                "&:hover": {
-                  cursor: "pointer",
-                },
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              GOTRIP
-            </Typography>
             {/* For small screens */}
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
@@ -163,12 +142,37 @@ function ResponsiveAppBar() {
                 </Button>
               ))}
             </Box>
+            <ModeOfTravelIcon
+              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            />
+            {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
+            <Typography
+              onClick={() => nav("/")}
+              variant="h6"
+              noWrap
+              component="a"
+              // href="#app-bar-with-responsive-menu"
+              sx={{
+                "&:hover": {
+                  cursor: "pointer",
+                },
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              GOTRIP
+            </Typography>
             <Box sx={{ flexGrow: 0 }}>
               {user ? (
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
-                      alt="Remy Sharp"
+                      alt={`${user.firstName} ${user.lastName}`}
                       src="/static/images/avatar/2.jpg"
                     />
                   </IconButton>
