@@ -16,6 +16,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { useState } from "react";
+import Stages from "../components/planner/Stages";
 
 const HomePage = () => {
   const [trips, setTrips] = useState([]);
@@ -55,8 +56,8 @@ const HomePage = () => {
           justifyContent={"space-around"}
         > */}
         {/* Trip Planner Form */}
-        <Stack item xs={12} md={6}>
-          <Card>
+        <Stack xs={12} md={6}>
+          {/* <Card>
             <CardContent>
               <Typography variant="h5" component="div" gutterBottom>
                 Plan Your Trip
@@ -80,7 +81,6 @@ const HomePage = () => {
               <TextField
                 label="Date"
                 type="date"
-                InputLabelProps={{ shrink: true }}
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -98,11 +98,12 @@ const HomePage = () => {
                 Add Trip
               </Button>
             </CardActions>
-          </Card>
+          </Card> */}
+          <Stages />
         </Stack>
 
         {/* Planned Trips */}
-        <Stack item xs={12} md={6} width={"50%"}>
+        <Stack xs={12} md={6} width={"50%"}>
           <Card>
             <CardContent>
               <Typography variant="h5" component="div" gutterBottom>
