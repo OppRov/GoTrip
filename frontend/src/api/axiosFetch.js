@@ -13,7 +13,9 @@ export default function axiosFetch({ url, method }) {
       const response = await axios[method.toLowerCase()](url, body);
       setData(response.data);
     } catch (err) {
-      setError(err.response.data);
+      if (err.response) {
+        setError(err.response.data.message);
+      } else setError(err.message);
       setData(null);
     } finally {
       setLoading(false);

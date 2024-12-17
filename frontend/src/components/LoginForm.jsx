@@ -5,19 +5,29 @@ import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import axiosFetch from "../api/axiosFetch";
 import { LOGIN_URL } from "../../constants/endpoints";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import LoadingOverlay from "./LoadingOverlay";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../hooks/useUserContext";
+import { HOME_ROUTE, SIGNUP_ROUTE } from "../../constants/clientRoutes";
+import { Alert, Snackbar } from "@mui/material";
 
 function LoginForm() {
+  const { setUser } = useUserContext();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const [openSnack, setOpenSnack] = useState(false);
+  const [snackMsg, setSnackMsg] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
   const { data, loading, error, fetchData } = axiosFetch({
     url: LOGIN_URL,
     method: "POST",
   });
+
   const {
     register,
     handleSubmit,
@@ -29,13 +39,35 @@ function LoginForm() {
     },
     mode: "onChange",
   });
+
   const nav = useNavigate();
 
   const submit = async () => {
     console.log("Email:", formData.email);
     console.log("Password:", formData.password);
     await fetchData(formData);
+    setSubmitted(true);
   };
+
+  //This will trigger after the data is fetched
+  useEffect(() => {
+    if (submitted) {
+      console.log("Data:", data, "Loading:", loading, "Error:", error);
+      if (!loading) {
+        setOpenSnack(true);
+        if (error) setSnackMsg(error);
+        else {
+          setUser(data.data.userInfo);
+          localStorage.setItem("userInfo", data.data.userInfo);
+          localStorage.setItem("token", data.data.token);
+          setSnackMsg("Login Successful");
+          setTimeout(() => {
+            nav(HOME_ROUTE);
+          }, 1750);
+        }
+      }
+    }
+  }, [data, loading, error]);
 
   const handleChange = (e) => {
     setFormData({
@@ -43,17 +75,19 @@ function LoginForm() {
       [e.target.name]: e.target.value,
     });
   };
-  useEffect(() => {
-    console.log("Data:", data, "Loading:", loading, "Error:", error);
-    if (!loading && !error && data) {
-      localStorage.setItem("token", data.data.token);
-      nav("/");
-    }
-  }, [data, loading, error]);
-
   return (
     <>
       <LoadingOverlay open={loading} />
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={openSnack}
+        autoHideDuration={3000}
+        onClose={() => setOpenSnack(false)}
+      >
+        <Alert severity={error ? "error" : "success"} variant="filled">
+          {snackMsg}
+        </Alert>
+      </Snackbar>
       <Box
         sx={{
           display: "flex",
@@ -122,7 +156,7 @@ function LoginForm() {
             <Button
               sx={{ ":hover": { textDecoration: "underline" } }}
               onClick={() => {
-                nav("/register");
+                nav(SIGNUP_ROUTE);
               }}
             >
               Sign Up

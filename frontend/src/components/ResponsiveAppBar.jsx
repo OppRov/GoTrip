@@ -17,7 +17,7 @@ import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../hooks/useUserContext";
 
-const pages = ["My Trips", "Pricing", "Blog"];
+const pages = ["My Trips", "Budgets", "Blog"];
 const settings = ["Profile", "Account", "Logout"];
 const logging = ["Login", "Register"];
 
@@ -120,7 +120,6 @@ function ResponsiveAppBar() {
             <ModeOfTravelIcon
               sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
             />
-            {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
             <Typography
               onClick={() => nav("/")}
               variant="h5"
@@ -147,7 +146,18 @@ function ResponsiveAppBar() {
                   key={page}
                   id={page}
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "white", display: "block" }}
+                  variant="text"
+                  sx={{
+                    my: 2,
+                    color: "white",
+                    display: "block",
+                    "&:hover": {
+                      backgroundColor: "primary.light",
+                      // transform: "scale(1.1)",
+                      translate: "0px -2px",
+                      transition: "all 0.15s ease-in-out",
+                    },
+                  }}
                 >
                   {page}
                 </Button>
@@ -166,10 +176,7 @@ function ResponsiveAppBar() {
               ) : (
                 <Tooltip title="User">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      // alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
-                    />
+                    <Avatar src="/static/images/avatar/2.jpg" />
                   </IconButton>
                 </Tooltip>
               )}
@@ -206,6 +213,7 @@ function ResponsiveAppBar() {
                         key={log}
                         id={log}
                         onClick={handleCloseUserMenu}
+                        sx={{ ":hover": { backgroundColor: "lightgray" } }}
                       >
                         <Typography sx={{ textAlign: "center" }}>
                           {log}

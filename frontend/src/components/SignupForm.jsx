@@ -8,6 +8,12 @@ import axiosFetch from "../api/axiosFetch";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import LoadingOverlay from "./LoadingOverlay";
+import { LOGIN_ROUTE } from "../../constants/clientRoutes";
+
+const EMAIL_REGEX =
+  /^[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~])*@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/;
+const PWD_REGEX =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?:(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}|[A-Za-z\d]{8,})$/;
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -65,7 +71,7 @@ const SignupForm = () => {
           alignItems: "center",
           justifyContent: "center",
           height: "100vh",
-          width: "100%",
+          // maxWidth: "20vw",
         }}
       >
         <Typography
@@ -110,9 +116,9 @@ const SignupForm = () => {
           />
           <TextField
             {...register("email", {
-              required: true,
+              required: "Email is required",
               pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                value: EMAIL_REGEX,
                 message: "Invalid email address",
               },
             })}
@@ -128,7 +134,15 @@ const SignupForm = () => {
             onChange={handleChange}
           />
           <TextField
-            {...register("password", { required: "Password is required" })}
+            {...register("password", {
+              required: "Password is required",
+              //This pattern requires at least one lowercase letter, one uppercase letter, one number, one special character and at least 8 characters
+              //The special character is optional but can only be one of: @$!%*?&
+              pattern: {
+                value: PWD_REGEX,
+                message: "Please enter a strong password",
+              },
+            })}
             error={errors.password ? true : false}
             helperText={errors.password?.message}
             id="password"
@@ -154,10 +168,10 @@ const SignupForm = () => {
             <Button
               sx={{ ":hover": { textDecoration: "underline" } }}
               onClick={() => {
-                nav("/login");
+                nav(LOGIN_ROUTE);
               }}
             >
-              Register
+              Sign In
             </Button>
           </Typography>
         </Box>
