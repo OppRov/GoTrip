@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axiosFetch from "../api/axiosFetch";
-import TripCard from "../components/TripCard";
+import { TRIPS_URL } from "../../constants/endpoints";
 
 const TripListPage = () => {
   const [trips, setTrips] = useState([]);
@@ -10,11 +10,11 @@ const TripListPage = () => {
   });
 
   useEffect(() => {
-    fetchData();
+    //fetchData();
   }, []);
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading && data) {
       setTrips(data.data.trips);
     }
   }, [data, loading, error]);
@@ -22,9 +22,7 @@ const TripListPage = () => {
   return (
     <>
       <h1>Trips</h1>
-      {trips.map((trip) => (
-        <TripCard key={trip._id} props={trip} />
-      ))}
+      {/* {trips.map((trip) => hello)} */}
     </>
   );
 };
