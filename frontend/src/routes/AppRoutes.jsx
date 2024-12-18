@@ -7,7 +7,9 @@ import {
   HOME_ROUTE,
   LOGIN_ROUTE,
   SIGNUP_ROUTE,
+  TRIPS_ROUTE,
 } from "../../constants/clientRoutes";
+import TripListPage from "../pages/TripListPage";
 
 const AppRoutes = () => {
   return (
@@ -18,6 +20,7 @@ const AppRoutes = () => {
             <Route path={HOME_ROUTE} element={<HomePage />} />
             <Route path={LOGIN_ROUTE} element={<LoginForm />} />
             <Route path={SIGNUP_ROUTE} element={<SignupForm />} />
+            <Route path={TRIPS_ROUTE} element={<TripListPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
