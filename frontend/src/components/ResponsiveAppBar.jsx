@@ -37,9 +37,11 @@ function ResponsiveAppBar() {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
-    // It been comment because it unused.
-    // const id = e.currentTarget.id;
+  const handleCloseNavMenu = (e) => {
+    const id = e.currentTarget.id;
+    console.log(id);
+    if (id === "My Trips") nav("/trips");
+
     setAnchorElNav(null);
   };
 
@@ -119,6 +121,30 @@ function ResponsiveAppBar() {
               GOTRIP
             </Typography>
             {/* For medium and large screens */}
+            <ModeOfTravelIcon
+              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            />
+            <Typography
+              onClick={() => nav("/")}
+              variant="h6"
+              noWrap
+              component="a"
+              // href="#app-bar-with-responsive-menu"
+              sx={{
+                "&:hover": {
+                  cursor: "pointer",
+                },
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              GOTRIP
+            </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
                 <Button
@@ -142,31 +168,7 @@ function ResponsiveAppBar() {
                 </Button>
               ))}
             </Box>
-            <ModeOfTravelIcon
-              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-            />
-            {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
-            <Typography
-              onClick={() => nav("/")}
-              variant="h6"
-              noWrap
-              component="a"
-              // href="#app-bar-with-responsive-menu"
-              sx={{
-                "&:hover": {
-                  cursor: "pointer",
-                },
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              GOTRIP
-            </Typography>
+
             <Box sx={{ flexGrow: 0 }}>
               {user ? (
                 <Tooltip title="Open settings">
