@@ -6,10 +6,12 @@ import SignupForm from "../components/SignupForm";
 import {
   HOME_ROUTE,
   LOGIN_ROUTE,
+  PLANNER_ROUTE,
   SIGNUP_ROUTE,
   TRIPS_ROUTE,
 } from "../../constants/clientRoutes";
 import TripListPage from "../pages/TripListPage";
+import TripPlanPage from "../pages/TripPlanPage";
 
 const AppRoutes = () => {
   return (
@@ -21,6 +23,7 @@ const AppRoutes = () => {
             <Route path={LOGIN_ROUTE} element={<LoginForm />} />
             <Route path={SIGNUP_ROUTE} element={<SignupForm />} />
             <Route path={TRIPS_ROUTE} element={<TripListPage />} />
+            <Route path={PLANNER_ROUTE} element={<TripPlanPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
