@@ -62,7 +62,7 @@ const TripListPage = () => {
                                         //         <MoreVertIcon />
                                         //     </IconButton>
                                         // }
-                                        title="Trip - A1    "
+                                        title="Trip - A1"
                                         // subheader="September 14, 2016"
                                     />
 
