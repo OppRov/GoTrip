@@ -19,7 +19,6 @@ import Grid from "@mui/material/Grid2";
 import { Container } from "@mui/material";
 
 const TripListPage = () => {
-
     const [trips, setTrips] = useState(new Array(6).fill(false));
     const { data, loading, error, fetchData } = axiosFetch({
         url: TRIPS_URL,
