@@ -5,9 +5,13 @@ export const theme = createTheme({
     primary: {
       main: "#f1671A",
       light: "#F07936",
+      lighter: "#FFA64D",
+      darkest: "#F1671A",
     },
     secondary: {
       main: "#696969",
+      light: "#808080",
+      lighter: "#A9A9A9",
     },
     tertiary: {
       main: "#222222",

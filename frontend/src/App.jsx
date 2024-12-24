@@ -7,6 +7,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import AppRoutes from "./routes/AppRoutes";
 import Stages from "./components/planner/Stages";
 import TripPlanPage from "./pages/TripPlanPage";
+
 import CalendarDisplay from "./components/CalendarDisplay";
 
 function App() {
