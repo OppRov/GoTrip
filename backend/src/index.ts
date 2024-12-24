@@ -11,7 +11,6 @@ import { Controllers } from "./common/types/controllers";
 import TripController from "./trip/trip.controller"
 
 const app = express();
-
 config();
 app.use(cors());
 app.use(bodyParser.json())
