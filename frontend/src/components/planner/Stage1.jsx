@@ -1,5 +1,5 @@
 import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import { DateRangePicker } from "@nextui-org/react";
 import { useState, useContext, useEffect } from "react";
 import { planContext } from "../../contexts/planContext";
@@ -47,7 +47,9 @@ const Stage1 = () => {
         gap: "5px",
       }}
     >
-      <h1 className="text-center float">Stage 1</h1>
+      <Typography variant="h5" component="h1" textAlign="center">
+        Stage 1
+      </Typography>
       <TextField onChange={handleChange} label="Destination" />
       <DateRangePicker
         onChange={handleDatePickerChange}
