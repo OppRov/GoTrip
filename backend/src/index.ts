@@ -8,6 +8,7 @@ import AuthController from "./authentication/auth.controller";
 import cors from "cors";
 import Middleware from "./common/middleware/middleware";
 import { Controllers } from "./common/types/controllers";
+import TripController from "./trip/trip.controller"
 
 const app = express();
 
@@ -29,7 +30,8 @@ app.use((req: Request, res: Response, next: NextFunction) => methodsBind([new Mi
 
 const controllers: Controllers[] = [
     new UserController(app, "users"),
-    new AuthController(app, "auth")
+    new AuthController(app, "auth"),
+    new TripController(app, "trips")
 ];
 methodsBind(controllers);
 

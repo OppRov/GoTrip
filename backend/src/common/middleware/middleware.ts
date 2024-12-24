@@ -17,15 +17,15 @@ class Middleware {
 
     public authMiddleware(): void {
         const token: string = this.req.headers.authorization?.split(' ')[1] || '';
-        // Use it when encrytion work on frontend
-        // const publicKey: string = readFileSync("RSA-keys/public.crt", "utf8");
+        const publicKey: string = readFileSync("RSA-keys/public.crt", "utf8");
         try {
-            if (this.req.originalUrl.includes("signIn") || this.req.originalUrl.includes("signUp") || verify(token, "publicKey")) return this.next();
+            if (this.req.originalUrl.includes("signIn") || this.req.originalUrl.includes("signUp") || verify(token, publicKey)) return this.next();
         } catch(error: any) {
             const response: InnerResponse = {
                 message: "ERROR: [UNAUTHORIZED]",
                 status: HttpStatus.UNAUTHORIZED
             };
+            console.log(error)
             if (error?.message) response.data = error;
             this.res.status(HttpStatus.UNAUTHORIZED).send(response);
         }

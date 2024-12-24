@@ -39,7 +39,6 @@ class UserService {
             const validate: [] | string[] = await validateObject(userData);
             if (validate.length > 0) return validate;
             await this.manager.save(userData);
-
             return true;
         } catch (err: any) {
             const emailError: { email?: string } = JSON.parse(err["message"].slice(err["message"].indexOf('{'), err["message"].indexOf('}') + 2).replace("email", '"email"'));
