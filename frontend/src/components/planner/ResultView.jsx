@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
+import CalendarDisplay from "../CalendarDisplay";
+import { planContext } from "../../contexts/planContext";
 
 const ResultView = () => {
-  return <div>ResultView</div>;
+  const { planData } = useContext(planContext);
+
+  return (
+    <>
+      {planData.destination}
+      <CalendarDisplay />
+    </>
+  );
 };
 
 export default ResultView;
