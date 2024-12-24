@@ -1,6 +1,7 @@
 import { IsEmail, IsEnum, IsHash, IsString, IsStrongPassword } from "class-validator";
-import { Column, Entity, ObjectIdColumn } from "typeorm";
+import { Column, Entity, ObjectIdColumn, OneToMany } from "typeorm";
 import { roles } from "../../common/enums/roles";
+import { Trip } from "./trip.entity";
 
 @Entity()
 export class User {
@@ -26,4 +27,8 @@ export class User {
     @Column({ default: "user" })
     @IsEnum(roles)
     role: string;
+
+    @Column()
+    @OneToMany(() => Trip, (trip: Trip) => trip)
+    trips: Trip[];
 }

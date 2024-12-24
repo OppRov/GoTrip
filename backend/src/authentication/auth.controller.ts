@@ -51,14 +51,13 @@ class AuthController {
             try {
                 const user: boolean | string[] | [boolean, string] = await this.service.signUp(req.body);
                 this.innerResponse.data = user;
-                if (Array.isArray(user) && user.length > 0) {
+                if (isArray(user) && user.length > 0) {
                     if (typeof user[0] === "boolean") {
                         this.innerResponse.data = null;
                         throw new Error(user[1]);
                     }
                     throw new Error("An error occurred");
                 }
-
                 this.innerResponse.message = "You signup was successfully";
                 res.status(this.innerResponse.status = HttpStatus.CREATED).send(this.innerResponse);
             } catch (err) {
