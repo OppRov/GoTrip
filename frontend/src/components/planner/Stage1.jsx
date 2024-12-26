@@ -1,14 +1,17 @@
+import { Box, TextField } from "@mui/material";
+import { DateRangePicker } from "@nextui-org/react";
+import React, { useState } from "react";
 import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
 import { Box, TextField, Typography } from "@mui/material";
 import { DateRangePicker } from "@nextui-org/react";
 import { useState, useContext, useEffect } from "react";
 import { planContext } from "../../contexts/planContext";
 
+
 const Stage1 = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [days, setDays] = useState(0);
-
   const { setPlanData, planData } = useContext(planContext);
 
   const handleDatePickerChange = (date) => {
@@ -16,6 +19,8 @@ const Stage1 = () => {
       date.start.year,
       date.start.month - 1,
       date.start.day,
+    );
+    const endDate = new Date(date.end.year, date.end.month - 1, date.end.day);
     ).toLocaleDateString("en-CA");
     const endDate = new Date(
       date.end.year,
@@ -42,11 +47,18 @@ const Stage1 = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-evenly",
+        border: "1px solid red",
         // border: "1px solid red",
         width: "fit-content",
         gap: "5px",
       }}
     >
+      <h1 className="text-center float">Stage 1</h1>
+      <TextField label="Destination" />
+      <DateRangePicker
+        onChange={handleDatePickerChange}
+        className={`bg-${"slate"}-50`}
+        isRequired
       <Typography variant="h5" component="h1" textAlign="center">
         Stage 1
       </Typography>

@@ -1,3 +1,7 @@
+import React from "react";
+
+const ResultView = () => {
+  return <div>ResultView</div>;
 import React, { useContext } from "react";
 import CalendarDisplay from "../CalendarDisplay";
 import { planContext } from "../../contexts/planContext";

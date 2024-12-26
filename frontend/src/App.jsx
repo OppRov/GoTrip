@@ -8,6 +8,8 @@ import AppRoutes from "./routes/AppRoutes";
 import Stages from "./components/planner/Stages";
 import TripPlanPage from "./pages/TripPlanPage";
 
+import CalendarDisplay from "./components/CalendarDisplay";
+
 function App() {
   return (
     <>
@@ -18,6 +20,7 @@ function App() {
           </UserProvider>
         </NextUIProvider>
       </ThemeProvider>
+      {/* <CalendarDisplay /> */}
     </>
   );
 }
