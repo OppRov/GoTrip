@@ -5,3 +5,5 @@ package-lock.json
 
 TODO.txt
 RSA-keys
+
+.DS_store

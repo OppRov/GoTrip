@@ -8,16 +8,19 @@ import AppRoutes from "./routes/AppRoutes";
 import Stages from "./components/planner/Stages";
 import TripPlanPage from "./pages/TripPlanPage";
 
+import CalendarDisplay from "./components/CalendarDisplay";
+
 function App() {
   return (
     <>
-      <ThemeProvider theme={theme}>
+      {/* <ThemeProvider theme={theme}>
         <NextUIProvider>
           <UserProvider>
             <AppRoutes />
           </UserProvider>
         </NextUIProvider>
       </ThemeProvider>
+      {/* <CalendarDisplay /> */}
     </>
   );
 }

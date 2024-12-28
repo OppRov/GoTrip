@@ -17,7 +17,7 @@ import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../hooks/useUserContext";
 
-const pages = ["My Trips", "Budgets", "Blog"];
+const pages = ["My Trips", "Budgets"];
 const settings = ["Profile", "Account", "Logout"];
 const logging = ["Login", "Register"];
 

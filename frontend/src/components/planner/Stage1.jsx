@@ -1,5 +1,5 @@
 import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
-import { Box, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, TextField, Typography } from "@mui/material";
 import { DateRangePicker } from "@nextui-org/react";
 import { useState, useContext, useEffect } from "react";
 import { planContext } from "../../contexts/planContext";
@@ -50,7 +50,15 @@ const Stage1 = () => {
       <Typography variant="h5" component="h1" textAlign="center">
         Stage 1
       </Typography>
-      <TextField onChange={handleChange} label="Destination" />
+      <Autocomplete
+        onChange={handleChange}
+        disablePortal
+        id="combo-box-demo"
+        options={["Vancouver", "Toronto", "Calgary", "Edmonton", "Winnipeg"]}
+        sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label="Destination" />}
+      />
+      {/* <TextField onChange={handleChange} label="Destination" /> */}
       <DateRangePicker
         onChange={handleDatePickerChange}
         // className={`bg-${"slate"}-50`}

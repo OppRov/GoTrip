@@ -15,7 +15,7 @@ export default (password: string): string => {
         );
 
         return decryptedPassword.toString();
-    } catch (err) {
-        return "ERROR";
+    } catch (err: any) {
+        return `ERROR: ${err.toString()}`;
     }
 }
