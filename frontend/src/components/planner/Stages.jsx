@@ -18,6 +18,9 @@ import Stage2 from "./Stage2";
 const StageList = [
   //Stage 1 destination selection and trip duration selection
   <Stage1 />,
+  <div>
+    <h1>Stage 2</h1>
+  </div>,
   //Stage 2 budget definition
   <Stage2 />,
 
