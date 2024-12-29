@@ -58,8 +58,11 @@ const HomePage = () => {
               <img src={myImage} alt="" />
             </Box>
           </Stack>
-          <Box>
+          <Box sx={{ display: "flex" }}>
             {/* Reccomendations */}
+            <TripCard />
+            <TripCard />
+            <TripCard />
             <TripCard />
           </Box>
         </Box>

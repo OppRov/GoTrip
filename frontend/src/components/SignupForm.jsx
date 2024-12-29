@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import LoadingOverlay from "./LoadingOverlay";
 import { LOGIN_ROUTE } from "../../constants/clientRoutes";
+import { Alert, Snackbar } from "@mui/material";
 
 const EMAIL_REGEX =
   /^[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~])*@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/;
@@ -23,10 +24,16 @@ const SignupForm = () => {
     password: "",
     role: "user",
   });
+
+  const [openSnack, setOpenSnack] = useState(false);
+  const [snackMsg, setSnackMsg] = useState();
+  const [submitted, setSubmitted] = useState(false);
+
   const { data, loading, error, fetchData } = axiosFetch({
     url: SIGNUP_URL,
     method: "POST",
   });
+
   const {
     register,
     handleSubmit,
@@ -43,6 +50,7 @@ const SignupForm = () => {
   });
 
   const nav = useNavigate();
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -53,17 +61,38 @@ const SignupForm = () => {
   const submit = async () => {
     console.log(formData);
     await fetchData(formData);
+    setSubmitted(true);
   };
 
   useEffect(() => {
-    if (data) nav("/login");
-    else if (error) console.log(error);
-    else if (loading) console.log("Loading...");
+    // if (data) nav("/login");
+    if (submitted) {
+      if (!loading) {
+        setOpenSnack(true);
+        if (error) setSnackMsg(error);
+        else {
+          setSnackMsg("Signup Successful");
+          setTimeout(() => {
+            nav(LOGIN_ROUTE);
+          }, 1750);
+        }
+      }
+    }
   }, [data, loading, error]);
 
   return (
     <>
       <LoadingOverlay open={loading} />
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={openSnack}
+        autoHideDuration={3000}
+        onClose={() => setOpenSnack(false)}
+      >
+        <Alert severity={error ? "error" : "success"} variant="filled">
+          {snackMsg}
+        </Alert>
+      </Snackbar>
       <Box
         sx={{
           display: "flex",
