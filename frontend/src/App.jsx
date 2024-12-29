@@ -13,14 +13,13 @@ import CalendarDisplay from "./components/CalendarDisplay";
 function App() {
   return (
     <>
-      {/* <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
         <NextUIProvider>
           <UserProvider>
             <AppRoutes />
           </UserProvider>
         </NextUIProvider>
       </ThemeProvider>
-      {/* <CalendarDisplay /> */}
     </>
   );
 }
