@@ -8,7 +8,7 @@ import AuthController from "./authentication/auth.controller";
 import cors from "cors";
 import Middleware from "./common/middleware/middleware";
 import { Controllers } from "./common/types/controllers";
-import TripController from "./trip/trip.controller"
+import TripController from "./trip/trip.controller";
 
 const app = express();
 config();

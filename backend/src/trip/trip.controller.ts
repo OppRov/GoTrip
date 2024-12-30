@@ -3,7 +3,8 @@ import TripService from "./trip.service";
 import { HttpStatus } from "../common/enums/http-status";
 import { InnerResponse } from "../common/interfaces/response.interface";
 import { Trip } from "../db/db-entities/trip.entity";
-import { isArray } from "class-validator";
+import { isArray, isString } from "class-validator";
+import getGooglePlaces from "../common/utils/getGooglePlaces";
 
 class TripController {
 
@@ -24,17 +25,17 @@ class TripController {
     }
 
     public findAll(): void {
-        this.app.get(`/${this.ROUTE_NAME}/`, async (req: Request, res: Response) => {
+        this.app.get(`/${this.ROUTE_NAME}/getAllTripsUser/:id`, async (req: Request, res: Response) => {
             try {
-                const users: [] | Trip[] = await this.service.findAllTrips()
+                const users: [] | Trip[] = await this.service.findAllTrips(req.params.id)
                 this.innerResponse.data = users;
                 this.innerResponse.message = "Success";
                 if (!users.length) throw new Error("There is no trips");
-                res.status(this.innerResponse.status).send(this.innerResponse);
+                res.status(this.innerResponse.status = HttpStatus.OK).send(this.innerResponse);
             } catch (err) {
                 this.innerResponse.message = err?.toString()!;
                 this.innerResponse.data = null;
-                res.status(this.innerResponse.status).send(this.innerResponse);
+                res.status(this.innerResponse.status = HttpStatus.NOT_FOUND).send(this.innerResponse);
             }
         });
     }
@@ -72,6 +73,36 @@ class TripController {
             catch (err) {
                 this.innerResponse.message = err?.toString()!;
                 res.status(this.innerResponse.status = HttpStatus.BAD_REQUEST).send(this.innerResponse);
+            }
+        });
+    }
+
+    public editTrip(): void {
+        this.app.put(`/${this.ROUTE_NAME}`, async (req: Request, res: Response) => {
+            try {
+                const updatedTrip: boolean = await this.service.editTrip(req.body);
+                this.innerResponse.message = "Trip update successfully";
+                if (!updatedTrip) throw new Error("Trip update failed");
+                res.status(this.innerResponse.status = HttpStatus.CREATED).send(this.innerResponse);
+            }
+            catch (err) {
+                this.innerResponse.message = err?.toString()!;
+                res.status(this.innerResponse.status = HttpStatus.BAD_REQUEST).send(this.innerResponse);
+            }
+        });
+    }
+
+    public getPlacesForTrip(): void {
+        this.app.get(`/${this.ROUTE_NAME}/getGooglePlaces/:place`, async (req: Request, res: Response) => {
+            try {
+                const place: string = req.params.place;
+                if (!isString(place)) throw new Error("The place is not a valid place");
+                this.innerResponse.data = await getGooglePlaces(place);
+                this.innerResponse.message = "Google places";
+                res.status(this.innerResponse.status = HttpStatus.OK).send(this.innerResponse);
+            } catch (err) {
+                this.innerResponse.message = err?.toString()!;
+                res.status(this.innerResponse.status = HttpStatus.BAD_REQUEST);
             }
         });
     }

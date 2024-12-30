@@ -1,5 +1,5 @@
 import { Itinerary } from "../common/interfaces/itinerary.interface";
-import { EntityManager, FindOptionsWhere } from "typeorm";
+import { EntityManager, getRepository, UpdateResult } from "typeorm";
 import { isDateString, isString } from "class-validator";
 import validateObject from "../common/utils/validateObject";
 import { Trip } from "../db/db-entities/trip.entity";
@@ -13,9 +13,9 @@ class TripService {
         this.manager = AppDataSource.manager;
     }
 
-    public async findAllTrips(): Promise<[] | Trip[]> {
+    public async findAllTrips(userID: string): Promise<[] | Trip[]> {
         try {
-            const data: Trip[] = await this.manager.find<Trip>(Trip);
+            const data: Trip[] = await this.manager.find<Trip>(Trip, { where: { userID: userID } });
             return data;
         } catch (err) {
             console.warn(err);
@@ -53,6 +53,23 @@ class TripService {
         }
     }
 
+    public async editTrip(newTrip: any): Promise<boolean> {
+        try {
+            const trip: any | boolean = await this.findOneTrip(newTrip._id);
+            if (!trip || typeof trip === "boolean") return false;
+            const tripKeys: string[] = Object.keys(newTrip);
+            tripKeys.map(value => value !== "_id" ?  trip[value] = newTrip[value] : trip[value] = trip[value]);
+            await this.manager.save(trip);
+            return true;
+        } catch (err) {
+            console.warn(err);
+            return false;
+        }
+    }
+
+    public async getRecommendedTrips() {
+
+    }
 }
 
 export default TripService;
