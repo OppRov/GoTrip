@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import CalendarDisplay from "../CalendarDisplay";
+import CalendarDisplay from "./CalendarDisplay";
 import { planContext } from "../../contexts/planContext";
 
 const ResultView = () => {

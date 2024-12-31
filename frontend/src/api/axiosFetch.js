@@ -9,19 +9,24 @@ export default function axiosFetch({ url, method, token }) {
     setLoading(true);
     setError(null);
     try {
-        const headers = {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                }
-        };
-        const methodType = method === "POST" || method === "PUT" || method === "PATCH";
-        const response = await axios[method.toLowerCase()](url, methodType ? body : headers, methodType ? headers : null);
+      const headers = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const methodType =
+        method === "POST" || method === "PUT" || method === "PATCH";
+      const response = await axios[method.toLowerCase()](
+        url,
+        methodType ? body : headers,
+        methodType ? headers : null,
+      );
 
-        setData(response.data);
+      setData(response.data);
     } catch (err) {
-        console.log({ err });
+      console.log({ err });
       if (err.response) {
-        setError(err.response.data.message);
+        setError(err.response);
       } else setError(err.message);
       setData(null);
     } finally {

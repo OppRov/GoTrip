@@ -52,6 +52,7 @@ function ResponsiveAppBar() {
     else if (id === "Register") nav("/signup");
     else if (id === "Logout") {
       localStorage.removeItem("userInfo");
+      localStorage.removeItem("token");
       nav("/");
       setUser(null);
     }

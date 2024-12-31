@@ -55,7 +55,7 @@ function LoginForm() {
       console.log("Data:", data, "Loading:", loading, "Error:", error);
       if (!loading) {
         setOpenSnack(true);
-        if (error) setSnackMsg(error);
+        if (error) setSnackMsg(error.data.message);
         else {
           setUser(data.data.userInfo);
           localStorage.setItem("userInfo", JSON.stringify(data.data.userInfo));
