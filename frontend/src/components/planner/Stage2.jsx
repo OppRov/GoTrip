@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import React from "react";
 
 const Stage2 = () => {
@@ -8,12 +8,16 @@ const Stage2 = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-evenly",
-        border: "1px solid red",
         width: "fit-content",
         gap: "5px",
       }}
     >
-      <h1>Stage 2</h1>
+      <Typography variant="h5" component="h1" textAlign="center">
+        Stage 2
+      </Typography>
+      <p>Select your estimated budget</p>
+
+      <TextField id="outlined-basic" label="Budget" variant="outlined" />
     </Box>
   );
 };

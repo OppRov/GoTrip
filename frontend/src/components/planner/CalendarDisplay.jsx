@@ -7,7 +7,7 @@ import timelimePlugin from "@fullcalendar/timeline";
 import { useState } from "react";
 import { useRef, useEffect } from "react";
 import { useContext } from "react";
-import { planContext } from "../contexts/planContext";
+import { planContext } from "../../contexts/planContext";
 import { use } from "react";
 
 export default function CalendarDisplay() {

@@ -69,7 +69,7 @@ const SignupForm = () => {
     if (submitted) {
       if (!loading) {
         setOpenSnack(true);
-        if (error) setSnackMsg(error);
+        if (error) setSnackMsg(error.data.message);
         else {
           setSnackMsg("Signup Successful");
           setTimeout(() => {

@@ -11,6 +11,72 @@ const Stage1 = () => {
 
   const { setPlanData, planData } = useContext(planContext);
 
+  const destinations = [
+    "Rio de Janeiro, Brazil",
+    "San Francisco, USA",
+    "Barcelona, Spain",
+    "Maldives",
+    "Mykonos, Greece",
+    "Bruges, Belgium",
+    "Galapagos Islands, Ecuador",
+    "Bora Bora, French Polynesia",
+    "Montreal, Canada",
+    "Berlin, Germany",
+    "Rome, Italy",
+    "Prague, Czech Republic",
+    "Agra, India",
+    "Cape Town, South Africa",
+    "Interlaken, Switzerland",
+    "Marrakech, Morocco",
+    "Jerusalem, Israel",
+    "Vancouver, Canada",
+    "Athens, Greece",
+    "Madrid, Spain",
+    "Petra, Jordan",
+    "New York City, USA",
+    "Kyoto, Japan",
+    "Vienna, Austria",
+    "Boracay, Philippines",
+    "Siem Reap, Cambodia",
+    "Florence, Italy",
+    "Delhi, India",
+    "Bali, Indonesia",
+    "Santorini, Greece",
+    "Buenos Aires, Argentina",
+    "Cancun, Mexico",
+    "Queenstown, New Zealand",
+    "Machu Picchu, Peru",
+    "Cairo, Egypt",
+    "Chichen Itza, Mexico",
+    "Istanbul, Turkey",
+    "Copenhagen, Denmark",
+    "New Zealand",
+    "Ibiza, Spain",
+    "Phuket, Thailand",
+    "Dubai, UAE",
+    "Seville, Spain",
+    "Lisbon, Portugal",
+    "Melbourne, Australia",
+    "Reykjavik, Iceland",
+    "Sydney, Australia",
+    "Seoul, South Korea",
+    "Hawaii, USA",
+    "Lucerne, Switzerland",
+    "Bangkok, Thailand",
+    "London, UK",
+    "Paris, France",
+    "Amsterdam, Netherlands",
+    "Budapest, Hungary",
+    "Dublin, Ireland",
+    "Patagonia, Argentina & Chile",
+    "Krakow, Poland",
+    "Toronto, Canada",
+    "Fiji",
+    "Singapore",
+    "Chicago, USA",
+    "Tokyo, Japan",
+  ];
+
   const handleDatePickerChange = (date) => {
     const startDate = new Date(
       date.start.year,
@@ -33,8 +99,12 @@ const Stage1 = () => {
   }, [days]);
 
   const handleChange = (e) => {
-    setPlanData({ ...planData, destination: e.target.value });
+    setPlanData({ ...planData, destination: e.target.innerText });
   };
+
+  useEffect(() => {
+    console.log(planData);
+  }, [planData]);
 
   return (
     <Box
@@ -54,7 +124,7 @@ const Stage1 = () => {
         onChange={handleChange}
         disablePortal
         id="combo-box-demo"
-        options={["Vancouver", "Toronto", "Calgary", "Edmonton", "Winnipeg"]}
+        options={destinations}
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label="Destination" />}
       />
