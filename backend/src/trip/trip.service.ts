@@ -5,6 +5,7 @@ import validateObject from "../common/utils/validateObject";
 import { Trip } from "../db/db-entities/trip.entity";
 import { AppDataSource } from "../db/db-config";
 import { ObjectId } from "mongodb";
+import { customsearch_v1, google } from "googleapis";
 
 class TripService {
     manager: EntityManager;
@@ -67,9 +68,33 @@ class TripService {
         }
     }
 
+    public async getGooglePlaces(place: string): Promise<any> {
+        try {
+            const response: Response = await fetch( `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&input=${place.split(" ").join("%20")}&inputtype=textquery&key=${process.env.GOOGLE_API_KEY}`);
+            const places = await response.json();
+
+            const customSearch = google.customsearch("v1");
+            const res = customSearch.cse.list({
+                auth: process.env.GOOGLE_API_KEY,
+                q: `${place} cityimages`,
+                cx: "a77c2f54ccbb5455a",
+                searchType: "image",
+                imgSize: "xlarge",
+                num: 10,
+            });
+            const imageUrls = (await res)?.data?.items!.map((item: customsearch_v1.Schema$Result) => item.link);
+            return { places, imageUrls };
+        } catch(err: any) {
+            console.log(err);
+            return err;
+        }
+
+    }
+
     public async getRecommendedTrips() {
 
     }
+
 }
 
 export default TripService;
