@@ -1,6 +1,6 @@
 import { Itinerary } from "../common/interfaces/itinerary.interface";
-import { EntityManager, getRepository, UpdateResult } from "typeorm";
-import { isDateString, isString } from "class-validator";
+import { EntityManager, FindManyOptions, Entity } from "typeorm";
+import { isDateString, isEmpty, isString } from "class-validator";
 import validateObject from "../common/utils/validateObject";
 import { Trip } from "../db/db-entities/trip.entity";
 import { AppDataSource } from "../db/db-config";
@@ -14,9 +14,9 @@ class TripService {
         this.manager = AppDataSource.manager;
     }
 
-    public async findAllTrips(userID: string): Promise<[] | Trip[]> {
+    public async findAllTrips(userID: string, options?: FindManyOptions<typeof Entity>): Promise<[] | Trip[]> {
         try {
-            const data: Trip[] = await this.manager.find<Trip>(Trip, { where: { userID: userID } });
+            const data: Trip[] = await this.manager.find<Trip>(Trip, isEmpty(options) ? { where: { userID: userID } } : options);
             return data;
         } catch (err) {
             console.warn(err);
@@ -86,13 +86,32 @@ class TripService {
             return { places, imageUrls };
         } catch(err: any) {
             console.log(err);
-            return err;
+            return false;
         }
-
     }
 
-    public async getRecommendedTrips() {
-
+    public async getRecommendedTrips(userID: string): Promise<[] | Trip[]> {
+        try {
+            const trips: [] | Trip[] = await this.findAllTrips(userID, { where: { userID: userID } });
+            const filterTrips: Trip[] = trips.filter((value) => value.recommended && value.ratingCount).sort((a: Trip, b: Trip) => a.ratingCount-b.ratingCount);
+            let temp = filterTrips[0].ratingCount, count = 0;
+            const recommendedTrips: Trip[] = [];
+            for (let i = 0; i < filterTrips.length; i++) {
+                if (filterTrips[i].ratingCount > temp) {
+                    temp = filterTrips[i].ratingCount;
+                    recommendedTrips[count++] = filterTrips[i];
+                }
+            }
+            const rtl: number = recommendedTrips.length-1;
+            return [
+                recommendedTrips[rtl],
+                recommendedTrips[rtl-1],
+                recommendedTrips[rtl-2]
+            ];
+        } catch (err) {
+            console.warn(err);
+            return [];
+        }
     }
 
 }
