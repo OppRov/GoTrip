@@ -13,7 +13,18 @@ import { use } from "react";
 export default function CalendarDisplay() {
   const calendarRef = useRef(null);
 
-  const { planData } = useContext(planContext);
+  const { planData, setPlanData } = useContext(planContext);
+  const [newEndDate, setNewEndDate] = useState("");
+
+  useEffect(() => {
+    if (planData.endDate) {
+      const { endDate } = planData;
+      const dataParts = endDate.split("-");
+      const date = new Date(dataParts[0], dataParts[1] - 1, dataParts[2]);
+      date.setDate(date.getDate() + 2);
+      setNewEndDate(date.toISOString().split("T")[0]);
+    }
+  }, [planData]);
 
   useEffect(() => {
     if (!planData.startDate || !planData.endDate) return;
@@ -68,7 +79,7 @@ export default function CalendarDisplay() {
       // }}
       validRange={{
         start: `${planData.startDate}`, // Start date of the range
-        end: `${planData.endDate}`, // End date of the range
+        end: newEndDate,
       }}
     ></FullCalendar>
   );
