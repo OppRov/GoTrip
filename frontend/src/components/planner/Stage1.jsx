@@ -78,28 +78,20 @@ const Stage1 = () => {
   ];
 
   const handleDatePickerChange = (date) => {
-    const startDate = new Date(
+    console.log("date updated");
+    const start = new Date(
       date.start.year,
       date.start.month - 1,
       date.start.day,
     ).toLocaleDateString("en-CA");
-    const endDate = new Date(
+    const end = new Date(
       date.end.year,
       date.end.month - 1,
-      date.end.day + 1,
+      date.end.day,
     ).toLocaleDateString("en-CA");
-    setStartDate(startDate);
-    setEndDate(endDate);
-    setDays((endDate - startDate) / (1000 * 60 * 60 * 24) + 1);
-    console.log(days);
-  };
-  useEffect(() => {
-    if (!startDate || !endDate) return;
-    setPlanData({ ...planData, duration: days, startDate, endDate });
-  }, [days]);
+    console.log("test", startDate, endDate);
 
-  const handleChange = (e) => {
-    setPlanData({ ...planData, destination: e.target.innerText });
+    setPlanData({ ...planData, startDate: start, endDate: end });
   };
 
   useEffect(() => {
@@ -112,24 +104,51 @@ const Stage1 = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-evenly",
-        // border: "1px solid red",
         width: "fit-content",
-        gap: "5px",
+        gap: "15px",
       }}
     >
-      <Typography variant="h5" component="h1" textAlign="center">
+      <Typography
+        variant="h5"
+        component="h1"
+        textAlign="center"
+        marginBottom={2}
+      >
         Stage 1
       </Typography>
       <Autocomplete
-        onChange={handleChange}
+        onInputChange={(e, value) =>
+          setPlanData({ ...planData, destination: value })
+        }
+        value={planData.destination}
         disablePortal
         id="combo-box-demo"
         options={destinations}
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label="Destination" />}
       />
-      {/* <TextField onChange={handleChange} label="Destination" /> */}
       <DateRangePicker
+        calendarProps={{
+          classNames: {
+            base: "bg-slate-300",
+            pickerWrapper: "bg-slate-300",
+            cellButton: [
+              "data-[today=true]:bg-default-100 data-[selected=true]:bg-transparent rounded-small",
+              // start (pseudo)
+              "data-[range-start=true]:before:rounded-l-small",
+              "data-[selection-start=true]:before:rounded-l-small",
+              // end (pseudo)
+              "data-[range-end=true]:before:rounded-r-small",
+              "data-[selection-end=true]:before:rounded-r-small",
+              // start (selected)
+              "data-[selected=true]:data-[selection-start=true]:data-[range-selection=true]:rounded-small",
+              "data-[selected=true]:data-[selection-start=true]:data-[range-selection=true]:bg-orange-500",
+              // end (selected)
+              "data-[selected=true]:data-[selection-end=true]:data-[range-selection=true]:rounded-small",
+              "data-[selected=true]:data-[selection-end=true]:data-[range-selection=true]:bg-orange-500",
+            ],
+          },
+        }}
         onChange={handleDatePickerChange}
         // className={`bg-${"slate"}-50`}
         isRequired

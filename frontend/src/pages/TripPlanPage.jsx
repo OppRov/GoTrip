@@ -36,26 +36,27 @@ const TripPlanPage = () => {
               display: "flex",
               height: "100vh",
               justifyContent: "space-between",
-              alignItems: "center",
+              // alignItems: "center",
               // border: "1px solid red",
               padding: "1rem",
               minWidth: "50vw",
             }}
           >
             {/* Stages */}
-            <Stack direction={"column"} sx={{ width: "40%", height: "50%" }}>
+            <Stack direction={"column"} sx={{ width: "40%", height: "100%" }}>
               <Paper
                 elevation={3}
                 sx={{
                   height: "100%",
-                  background: theme.palette.secondary.lighter,
+                  // background: theme.palette.secondary.lighter,
                 }}
               >
                 <Box
                   sx={{
                     display: "flex",
-                    justifyContent: "center",
-                    // border: "1px solid blue",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
                     padding: "1rem",
                     height: "80%",
                   }}
@@ -77,12 +78,17 @@ const TripPlanPage = () => {
               </Paper>
             </Stack>
             {/* Result */}
-            <Stack
-              direction={"column"}
-              sx={{ width: "60%", height: "100%", border: "1px solid black" }}
-            >
-              <ResultView />
-            </Stack>
+            <Paper elevation={3} sx={{ height: "100%", width: "60%" }}>
+              <Stack
+                direction={"column"}
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
+                <ResultView />
+              </Stack>
+            </Paper>
           </Stack>
         </Container>
       </PlanProvider>

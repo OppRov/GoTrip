@@ -30,8 +30,10 @@ import { TRIPS_URL } from "../../constants/endpoints";
 const HomePage = () => {
   const nav = useNavigate();
 
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
   const { data, loading, error, fetchData } = axiosFetch({
-    url: TRIPS_URL,
+    url: `${TRIPS_URL}/getAllTripsUser/${userInfo?.id}`,
     method: "GET",
     token: localStorage.getItem("token"),
   });
@@ -43,6 +45,11 @@ const HomePage = () => {
   useEffect(() => {
     if (!loading && !error && data) {
       console.log(data);
+    } else if (error?.status === 401) {
+      //logout
+      localStorage.removeItem("token");
+      localStorage.removeItem("userInfo");
+      nav("/");
     }
   }, [data, loading, error]);
 
