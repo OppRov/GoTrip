@@ -1,6 +1,5 @@
-import { IsNumber, IsString, IsDateString, IsObject, IsArray } from "class-validator";
-import { Column, Entity, ManyToOne, ObjectIdColumn, OneToMany, TableForeignKey } from "typeorm";
-import { roles } from "../../common/enums/roles";
+import { IsNumber, IsString, IsDateString, IsBoolean, IsArray, IsOptional } from "class-validator";
+import { Column, Entity, ManyToOne, ObjectIdColumn} from "typeorm";
 import { User } from "./user.entity";
 import { Itinerary } from "../../common/interfaces/itinerary.interface";
 
@@ -37,4 +36,12 @@ export class Trip {
     @Column()
     @IsArray()
     itinerary: Itinerary [];
+
+    @Column({ default: false, type: "bool" })
+    @IsBoolean()
+    recommended: boolean;
+
+    @Column({ default: 0, type: "int64" })
+    @IsNumber()
+    ratingCount: number;
 }

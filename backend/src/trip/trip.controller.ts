@@ -26,10 +26,10 @@ class TripController {
     public findAll(): void {
         this.app.get(`/${this.ROUTE_NAME}/getAllTripsUser/:id`, async (req: Request, res: Response) => {
             try {
-                const users: [] | Trip[] = await this.service.findAllTrips(req.params.id)
-                this.innerResponse.data = users;
+                const trips: [] | Trip[] = await this.service.findAllTrips(req.params.id)
+                this.innerResponse.data = trips;
                 this.innerResponse.message = "Success";
-                if (!users.length) throw new Error("There is no trips");
+                if (!trips.length) throw new Error("There is no trips");
                 res.status(this.innerResponse.status = HttpStatus.OK).send(this.innerResponse);
             } catch (err) {
                 this.innerResponse.message = err?.toString()!;
@@ -45,7 +45,10 @@ class TripController {
                 const trip: Trip | boolean = await this.service.findOneTrip(req.params.id)
                 this.innerResponse.data = trip;
                 this.innerResponse.message = "Success";
-                if (!trip) throw new Error("Trip not found");
+                if (!trip) {
+                    this.innerResponse.status = HttpStatus.NOT_FOUND;
+                    throw new Error("Trip not found");
+                }
                 res.status(this.innerResponse.status = HttpStatus.OK).send(this.innerResponse);
             } catch (err) {
                 this.innerResponse.message = err?.toString()!;
@@ -101,7 +104,23 @@ class TripController {
                 res.status(this.innerResponse.status = HttpStatus.OK).send(this.innerResponse);
             } catch (err) {
                 this.innerResponse.message = err?.toString()!;
-                res.status(this.innerResponse.status = HttpStatus.BAD_REQUEST);
+                res.status(this.innerResponse.status = HttpStatus.BAD_REQUEST).send(this.innerResponse);
+            }
+        });
+    }
+
+    public getRecommendedTrips(): void {
+        this.app.get(`/${this.ROUTE_NAME}/getRecommendedTrips/:userID`, async (req: Request, res: Response) => {
+            try {
+                const recommendedTrips: [] | Trip[] = await this.service.getRecommendedTrips(req.params.userID);
+                this.innerResponse.data = recommendedTrips;
+                this.innerResponse.message = "Success";
+                if (!recommendedTrips.length) throw new Error("There is no recommended trips");
+                res.status(this.innerResponse.status = HttpStatus.OK).send(this.innerResponse);
+            } catch (err) {
+                this.innerResponse.message = err?.toString()!;
+                this.innerResponse.data = null;
+                res.status(this.innerResponse.status = HttpStatus.NOT_FOUND).send(this.innerResponse);
             }
         });
     }
