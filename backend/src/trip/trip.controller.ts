@@ -4,6 +4,7 @@ import { HttpStatus } from "../common/enums/http-status";
 import { InnerResponse } from "../common/interfaces/response.interface";
 import { Trip } from "../db/db-entities/trip.entity";
 import { isArray, isString } from "class-validator";
+import { GooglePlacesResponse } from "./trip.interface";
 
 class TripController {
 
@@ -100,7 +101,9 @@ class TripController {
             try {
                 const place: string = req.params.place;
                 if (!isString(place)) throw new Error("The place is not a valid place");
-                this.innerResponse.data = await this.service.getGooglePlaces(place);
+                const places: GooglePlacesResponse | boolean = await this.service.getGooglePlaces(place);
+                if (typeof places === "boolean") throw new Error("An error occurred");
+                this.innerResponse.data = places;
                 this.innerResponse.message = "Google places";
                 res.status(this.innerResponse.status = HttpStatus.OK).send(this.innerResponse);
             } catch (err) {
@@ -126,4 +129,5 @@ class TripController {
         });
     }
 }
+
 export default TripController;
