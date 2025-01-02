@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export const planContext = createContext();
 
@@ -8,7 +8,12 @@ export const PlanProvider = ({ children }) => {
     startDate: "",
     endDate: "",
     duration: 0,
+    thumbnail: "",
   });
+
+  useEffect(() => {
+    console.log(planData);
+  }, [planData]);
 
   return (
     <planContext.Provider value={{ planData, setPlanData }}>

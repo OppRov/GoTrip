@@ -24,7 +24,7 @@ const TripListPage = () => {
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   const { data, loading, error, fetchData } = axiosFetch({
-    url: `${TRIPS_URL}/getAllTripsUser/${userInfo.id}`,
+    url: `${TRIPS_URL}/getAllTripsUser/${userInfo?.id}`,
     method: "GET",
     token: localStorage.getItem("token"),
   });
