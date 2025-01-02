@@ -8,7 +8,7 @@ import {
   LOGIN_ROUTE,
   PLANNER_ROUTE,
   SIGNUP_ROUTE,
-  TRIPS_ROUTE,
+  TRIPS_ROUTE
 } from "../../constants/clientRoutes";
 import TripListPage from "../pages/TripListPage";
 import TripPlanPage from "../pages/TripPlanPage";
