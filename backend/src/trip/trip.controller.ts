@@ -40,7 +40,7 @@ class TripController {
     }
 
     public findOne(): void {
-        this.app.get(`/${this.ROUTE_NAME}/:id`, async (req: Request, res: Response) => {
+        this.app.get(`/${this.ROUTE_NAME}/findOneTrip/:id`, async (req: Request, res: Response) => {
             try {
                 const trip: Trip | boolean = await this.service.findOneTrip(req.params.id)
                 this.innerResponse.data = trip;
@@ -84,6 +84,7 @@ class TripController {
             try {
                 const updatedTrip: boolean = await this.service.editTrip(req.body);
                 this.innerResponse.message = "Trip update successfully";
+                this.innerResponse.data = updatedTrip;
                 if (!updatedTrip) throw new Error("Trip update failed");
                 res.status(this.innerResponse.status = HttpStatus.CREATED).send(this.innerResponse);
             }
@@ -110,9 +111,9 @@ class TripController {
     }
 
     public getRecommendedTrips(): void {
-        this.app.get(`/${this.ROUTE_NAME}/getRecommendedTrips/:userID`, async (req: Request, res: Response) => {
+        this.app.get(`/${this.ROUTE_NAME}/getRecommendedTrips`, async (req: Request, res: Response) => {
             try {
-                const recommendedTrips: [] | Trip[] = await this.service.getRecommendedTrips(req.params.userID);
+                const recommendedTrips: [] | Trip[] = await this.service.getRecommendedTrips();
                 this.innerResponse.data = recommendedTrips;
                 this.innerResponse.message = "Success";
                 if (!recommendedTrips.length) throw new Error("There is no recommended trips");
