@@ -23,10 +23,7 @@ function LoginForm() {
   const [snackMsg, setSnackMsg] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const { data, loading, error, fetchData } = axiosFetch({
-    url: LOGIN_URL,
-    method: "POST",
-  });
+  const { data, loading, error, fetchData } = axiosFetch();
 
   const {
     register,
@@ -45,7 +42,11 @@ function LoginForm() {
   const submit = async () => {
     console.log("Email:", formData.email);
     console.log("Password:", formData.password);
-    await fetchData(formData);
+    await fetchData({
+      url: LOGIN_URL,
+      method: "POST",
+      body: formData,
+    });
     setSubmitted(true);
   };
 

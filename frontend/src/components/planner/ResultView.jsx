@@ -7,7 +7,6 @@ const ResultView = () => {
 
   return (
     <>
-      {planData.destination}
       <CalendarDisplay />
     </>
   );
