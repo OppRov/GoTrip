@@ -12,24 +12,17 @@ import LoadingOverlay from "./LoadingOverlay";
 import axiosFetch from "../api/axiosFetch";
 import { TRIPS_URL } from "../../constants/endpoints";
 
-const TripCard = ({ image, destination, activities }) => {
-  const [tripData, setTripData] = useState({
-    title: "title",
-    destination: "dest",
-    activities: "act",
-    image:
-      "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHRyYXZlbHxlbnwwfHwwfHx8MA%3D%3D",
-  });
+const TripCard = ({ image, destination, activities, title, preview }) => {
   //Add to user's trips
-  const { data, loading, error, fetchData } = axiosFetch({
-    url: TRIPS_URL,
-    method: "POST",
-    token: localStorage.getItem("token"),
-  });
+  const { data, loading, error, fetchData } = axiosFetch();
 
   const handleAddTrip = () => {
     console.log("adding trip");
-    fetchData();
+    fetchData({
+      url: TRIPS_URL,
+      method: "POST",
+      token: localStorage.getItem("token"),
+    });
   };
 
   useEffect(() => {
@@ -58,11 +51,17 @@ const TripCard = ({ image, destination, activities }) => {
           sx={{ p: 1, display: "flex", flexDirection: "column", gap: "10px" }}
         >
           <CardMedia>
-            <Box sx={{ width: "100%", height: "175px" }}>
+            <Box sx={{ width: "100%" }}>
               <img
-                src={tripData.image}
+                onError={(e) => {
+                  e.target.src =
+                    "https://dispatcheseurope.com/wp-content/uploads/2016/05/Berlin2.jpg";
+                }}
+                src={image}
                 alt=""
                 width={"100%"}
+                // height={"200px"}
+
                 style={{ borderRadius: "10px" }}
               />
             </Box>
@@ -80,13 +79,9 @@ const TripCard = ({ image, destination, activities }) => {
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="h4">{tripData.title}</Typography>
-            <Typography variant="h5">
-              Destination: {tripData.destination}
-            </Typography>
-            <Typography variant="h5">
-              Activities: {tripData.activities}
-            </Typography>
+            <Typography variant="h4">{title}</Typography>
+            <Typography variant="h5">Destination: {destination}</Typography>
+            <Typography variant="h5">Activities: {activities}</Typography>
 
             <Button variant="contained" sx={{ width: "100%" }}>
               Add to trips

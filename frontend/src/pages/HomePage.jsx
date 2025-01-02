@@ -32,26 +32,24 @@ const HomePage = () => {
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-  const { data, loading, error, fetchData } = axiosFetch({
-    url: `${TRIPS_URL}/getAllTripsUser/${userInfo?.id}`,
-    method: "GET",
-    token: localStorage.getItem("token"),
-  });
+  const { data, loading, error, fetchData } = axiosFetch();
 
   useEffect(() => {
-    fetchData();
+    fetchData({
+      url: `${TRIPS_URL}/getRecommendedTrips`,
+      method: "GET",
+    });
   }, []);
 
   useEffect(() => {
     if (!loading && !error && data) {
       console.log(data);
-    } else if (error?.status === 401) {
-      //logout
-      localStorage.removeItem("token");
-      localStorage.removeItem("userInfo");
-      nav("/");
     }
   }, [data, loading, error]);
+
+  const handlePlanClick = () => {
+    //check if user is logged in by sending a request
+  };
 
   return (
     <>
@@ -82,7 +80,7 @@ const HomePage = () => {
                 journey seamless and unforgettable.
               </Typography>
               <Box>
-                <Button variant="contained" onClick={() => nav("/planner")}>
+                <Button variant="contained" onClick={handlePlanClick}>
                   Plan your next trip!
                 </Button>
               </Box>

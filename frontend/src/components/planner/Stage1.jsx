@@ -3,11 +3,14 @@ import { Autocomplete, Box, TextField, Typography } from "@mui/material";
 import { DateRangePicker } from "@nextui-org/react";
 import { useState, useContext, useEffect } from "react";
 import { planContext } from "../../contexts/planContext";
+import { TRIPS_URL } from "../../../constants/endpoints";
+import axiosFetch from "../../api/axiosFetch";
 
 const Stage1 = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [days, setDays] = useState(0);
+  const [destinationEntered, setDestinationEntered] = useState(false);
 
   const { setPlanData, planData } = useContext(planContext);
 
@@ -83,21 +86,38 @@ const Stage1 = () => {
       date.start.year,
       date.start.month - 1,
       date.start.day,
-    ).toLocaleDateString("en-CA");
-    const end = new Date(
-      date.end.year,
-      date.end.month - 1,
-      date.end.day,
-    ).toLocaleDateString("en-CA");
-    console.log("test", startDate, endDate);
+    );
+    const end = new Date(date.end.year, date.end.month - 1, date.end.day);
 
-    setPlanData({ ...planData, startDate: start, endDate: end });
+    const oneDay = 1000 * 60 * 60 * 24; // milliseconds in a day
+    const diffInTime = Math.abs(end.getTime() - start.getTime());
+    const days = Math.round(diffInTime / oneDay) + 1;
+
+    setPlanData({
+      ...planData,
+      duration: days,
+      startDate: start.toLocaleDateString("en-CA"),
+      endDate: end.toLocaleDateString("en-CA"),
+    });
+  };
+
+  const { data, loading, error, fetchData } = axiosFetch();
+
+  const getImages = async (destination) => {
+    await fetchData({
+      url: `${TRIPS_URL}/getGooglePlaces/${destination} skyline`,
+      method: "GET",
+      token: localStorage.getItem("token"),
+    });
+    setDestinationEntered(true);
   };
 
   useEffect(() => {
-    console.log(planData);
-  }, [planData]);
-
+    if (!loading && !error && data) {
+      console.log(data.data.imageUrls[0]);
+      setPlanData({ ...planData, thumbnail: data.data.imageUrls[0] });
+    }
+  }, [data, loading, error]);
   return (
     <Box
       sx={{
@@ -106,6 +126,7 @@ const Stage1 = () => {
         justifyContent: "space-evenly",
         width: "fit-content",
         gap: "15px",
+        height: "80%",
       }}
     >
       <Typography
@@ -117,9 +138,10 @@ const Stage1 = () => {
         Stage 1
       </Typography>
       <Autocomplete
-        onInputChange={(e, value) =>
-          setPlanData({ ...planData, destination: value })
-        }
+        onInputChange={(e, value) => {
+          setPlanData({ ...planData, destination: value });
+          if (destinations.includes(value)) getImages(value);
+        }}
         value={planData.destination}
         disablePortal
         id="combo-box-demo"
@@ -154,6 +176,18 @@ const Stage1 = () => {
         isRequired
         minValue={today(getLocalTimeZone())}
         label="Trip Duration"
+      />
+
+      <TextField
+        id="outlined-basic"
+        label="Budget"
+        variant="outlined"
+        type="number"
+        onChange={(e) => {
+          const value = parseInt(e.target.value, 10);
+          setPlanData({ ...planData, budget: value });
+        }}
+        slotProps={{ input: { min: 0 } }}
       />
     </Box>
   );
