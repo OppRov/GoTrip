@@ -12,6 +12,7 @@ import {
 } from "../../constants/clientRoutes";
 import TripListPage from "../pages/TripListPage";
 import TripPlanPage from "../pages/TripPlanPage";
+import { PlanProvider } from "../contexts/planContext";
 
 const AppRoutes = () => {
   return (
@@ -23,7 +24,14 @@ const AppRoutes = () => {
             <Route path={LOGIN_ROUTE} element={<LoginForm />} />
             <Route path={SIGNUP_ROUTE} element={<SignupForm />} />
             <Route path={TRIPS_ROUTE} element={<TripListPage />} />
-            <Route path={PLANNER_ROUTE} element={<TripPlanPage />} />
+            <Route
+              path={PLANNER_ROUTE}
+              element={
+                <PlanProvider>
+                  <TripPlanPage />
+                </PlanProvider>
+              }
+            />
           </Route>
         </Routes>
       </BrowserRouter>

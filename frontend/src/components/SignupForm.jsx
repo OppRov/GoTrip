@@ -29,10 +29,7 @@ const SignupForm = () => {
   const [snackMsg, setSnackMsg] = useState();
   const [submitted, setSubmitted] = useState(false);
 
-  const { data, loading, error, fetchData } = axiosFetch({
-    url: SIGNUP_URL,
-    method: "POST",
-  });
+  const { data, loading, error, fetchData } = axiosFetch();
 
   const {
     register,
@@ -60,7 +57,11 @@ const SignupForm = () => {
 
   const submit = async () => {
     console.log(formData);
-    await fetchData(formData);
+    await fetchData({
+      url: SIGNUP_URL,
+      method: "POST",
+      body: formData,
+    });
     setSubmitted(true);
   };
 

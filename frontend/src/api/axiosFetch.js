@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function axiosFetch({ url, method, token }) {
+export default function axiosFetch() {
+  const nav = useNavigate();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const fetchData = async (body) => {
+  const fetchData = async ({ url, method, body, token }) => {
     setLoading(true);
     setError(null);
     try {
@@ -26,6 +28,11 @@ export default function axiosFetch({ url, method, token }) {
     } catch (err) {
       console.log({ err });
       if (err.response) {
+        if (err.response.status === 401) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("userInfo");
+          nav("/login");
+        }
         setError(err.response);
       } else setError(err.message);
       setData(null);
