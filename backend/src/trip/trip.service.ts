@@ -105,9 +105,9 @@ class TripService {
         }
     }
 
-    public async getRecommendedTrips(userID: string): Promise<[] | Trip[]> {
+    public async getRecommendedTrips(): Promise<[] | Trip[]> {
         try {
-            const trips: [] | Trip[] = await this.findAllTrips(userID, { where: { userID: userID } });
+            const trips: [] | Trip[] = await this.manager.find<Trip>(Trip);
             const filterTrips: Trip[] = trips.filter((value) => value.recommended && value.ratingCount).sort((a: Trip, b: Trip) => a.ratingCount-b.ratingCount);
             let temp = filterTrips[0].ratingCount, count = 0;
             const recommendedTrips: Trip[] = [];
