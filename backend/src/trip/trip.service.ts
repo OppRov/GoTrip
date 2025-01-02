@@ -6,6 +6,7 @@ import { Trip } from "../db/db-entities/trip.entity";
 import { AppDataSource } from "../db/db-config";
 import { ObjectId } from "mongodb";
 import { customsearch_v1, google } from "googleapis";
+import { PlaceDTO, GooglePlacesResponse } from "./trip.interface";
 
 class TripService {
     manager: EntityManager;
@@ -68,10 +69,24 @@ class TripService {
         }
     }
 
-    public async getGooglePlaces(place: string): Promise<any> {
+    public async getGooglePlaces(place: string): Promise<GooglePlacesResponse | boolean> {
         try {
             const response: Response = await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${place.split(" ").join("%20")}&key=${process.env.GOOGLE_API_KEY}`);
             const places = await response.json();
+
+            const placesResult: PlaceDTO[] = places.results.filter((place: any) => place.business_status === "OPERATIONAL").map((place: PlaceDTO) => {
+                return {
+                    business_status: place.business_status,
+                    formatted_address: place.formatted_address,
+                    name: place.name,
+                    opening_hours: place.opening_hours,
+                    place_id: place.place_id,
+                    price_level: place.price_level,
+                    rating: place.rating,
+                    types: place.types,
+                    user_ratings_total: place.user_ratings_total
+                }
+            });
 
             const customSearch = google.customsearch("v1");
             const res = customSearch.cse.list({
@@ -82,8 +97,8 @@ class TripService {
                 imgSize: "xlarge",
                 num: 10,
             });
-            const imageUrls = (await res)?.data?.items!.map((item: customsearch_v1.Schema$Result) => item.link);
-            return { places, imageUrls };
+            const imagesUrls = (await res)?.data?.items!.map((item: customsearch_v1.Schema$Result) => item.link);
+            return { placesResult, imagesUrls };
         } catch(err: any) {
             console.log(err);
             return false;
