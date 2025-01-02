@@ -70,7 +70,7 @@ class TripService {
 
     public async getGooglePlaces(place: string): Promise<any> {
         try {
-            const response: Response = await fetch( `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&input=${place.split(" ").join("%20")}&inputtype=textquery&key=${process.env.GOOGLE_API_KEY}`);
+            const response: Response = await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${place.split(" ").join("%20")}&key=${process.env.GOOGLE_API_KEY}`);
             const places = await response.json();
 
             const customSearch = google.customsearch("v1");
