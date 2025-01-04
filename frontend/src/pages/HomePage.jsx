@@ -49,6 +49,7 @@ const HomePage = () => {
 
   const handlePlanClick = () => {
     //check if user is logged in by sending a request
+    nav("/planner");
   };
 
   return (

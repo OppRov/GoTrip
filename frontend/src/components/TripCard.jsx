@@ -51,20 +51,19 @@ const TripCard = ({ image, destination, activities, title, preview }) => {
           sx={{ p: 1, display: "flex", flexDirection: "column", gap: "10px" }}
         >
           <CardMedia>
-            <Box sx={{ width: "100%" }}>
-              <img
-                onError={(e) => {
-                  e.target.src =
-                    "https://dispatcheseurope.com/wp-content/uploads/2016/05/Berlin2.jpg";
-                }}
-                src={image}
-                alt=""
-                width={"100%"}
-                // height={"200px"}
-
-                style={{ borderRadius: "10px" }}
-              />
-            </Box>
+            <img
+              onError={(e) => {
+                e.target.src =
+                  "https://dispatcheseurope.com/wp-content/uploads/2016/05/Berlin2.jpg";
+                console.log("error");
+              }}
+              src={image}
+              alt=""
+              // width="100%"
+              height="200px"
+              // objectfit="cover"
+              style={{ borderRadius: "10px", objectFit: "fill" }}
+            />
           </CardMedia>
 
           <Box
