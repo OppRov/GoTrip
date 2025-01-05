@@ -63,7 +63,7 @@ const TripListPage = () => {
          </Button>
       <Grid container spacing={5} marginTop="10px">
         {trips.map((value, index) => {
-          return <TripCard key={index} {...value} />;
+          return <TripCard key={index} {...value} isAvailable={false} />;
         })}
       </Grid>
     </Container>

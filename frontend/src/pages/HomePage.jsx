@@ -135,7 +135,7 @@ const HomePage = () => {
                       key={i}
                       id={trip.id}
                       title={trip.title}
-                      image={trip.image}
+                      imageTrip={trip.image}
                     />
                   ))}
                 </Box>
