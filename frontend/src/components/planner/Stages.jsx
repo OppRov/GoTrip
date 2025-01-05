@@ -14,6 +14,7 @@ import React, { useEffect, useState } from "react";
 import { SystemColors } from "../../themes/SystemColors";
 import Stage1 from "./Stage1";
 import Stage2 from "./Stage2";
+import Stage3 from "./Stage3";
 
 const StageList = [
   //Stage 1 destination selection and trip duration selection
@@ -22,9 +23,7 @@ const StageList = [
   //Stage 2 budget definition
   <Stage2 />,
 
-  <div>
-    <h1>Stage 3</h1>
-  </div>,
+  <Stage3 />,
 ];
 
 //Page through the stages with a next and back button at the bottom
