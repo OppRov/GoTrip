@@ -45,7 +45,6 @@ const TripCard = ({ image, destination, activities, title, preview }) => {
           height: "400px",
           p: 0,
         }}
-        onClick={handleAddTrip}
       >
         <CardContent
           sx={{ p: 1, display: "flex", flexDirection: "column", gap: "10px" }}
@@ -55,14 +54,11 @@ const TripCard = ({ image, destination, activities, title, preview }) => {
               onError={(e) => {
                 e.target.src =
                   "https://dispatcheseurope.com/wp-content/uploads/2016/05/Berlin2.jpg";
-                console.log("error");
               }}
               src={image}
               alt=""
-              // width="100%"
-              height="200px"
-              // objectfit="cover"
-              style={{ borderRadius: "10px", objectFit: "fill" }}
+              style={{ borderRadius: "10px" }}
+              className="w-full h-40 object-fill"
             />
           </CardMedia>
 
@@ -82,7 +78,11 @@ const TripCard = ({ image, destination, activities, title, preview }) => {
             <Typography variant="h5">Destination: {destination}</Typography>
             <Typography variant="h5">Activities: {activities}</Typography>
 
-            <Button variant="contained" sx={{ width: "100%" }}>
+            <Button
+              variant="contained"
+              onClick={handleAddTrip}
+              sx={{ width: "100%" }}
+            >
               Add to trips
             </Button>
           </Box>
