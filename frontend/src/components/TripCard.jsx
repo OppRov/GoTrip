@@ -1,3 +1,4 @@
+/* eslint-disable */
 import {
   Box,
   Button,
@@ -12,8 +13,8 @@ import LoadingOverlay from "./LoadingOverlay";
 import axiosFetch from "../api/axiosFetch";
 import { TRIPS_URL } from "../../constants/endpoints";
 
-const TripCard = ({ image, destination, activities, title, preview }) => {
-  //Add to user's trips
+const TripCard = ({ imageTrip, destination, itinerary, tripName, preview }) => {
+  // Add to user's trips
   const { data, loading, error, fetchData } = axiosFetch();
 
   const handleAddTrip = () => {
@@ -55,7 +56,7 @@ const TripCard = ({ image, destination, activities, title, preview }) => {
                 e.target.src =
                   "https://dispatcheseurope.com/wp-content/uploads/2016/05/Berlin2.jpg";
               }}
-              src={image}
+              src={imageTrip}
               alt=""
               style={{ borderRadius: "10px" }}
               className="w-full h-40 object-fill"
@@ -74,9 +75,11 @@ const TripCard = ({ image, destination, activities, title, preview }) => {
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="h4">{title}</Typography>
+            <Typography variant="h4">{tripName}</Typography>
             <Typography variant="h5">Destination: {destination}</Typography>
-            <Typography variant="h5">Activities: {activities}</Typography>
+            <Typography variant="h5" height="4rem">Activities:
+                {itinerary?.map(value => value?.events?.map((event, index) => index < 2 ? ' ' + event?.name + ' ' : ''))}
+            </Typography>
 
             <Button
               variant="contained"
@@ -84,6 +87,7 @@ const TripCard = ({ image, destination, activities, title, preview }) => {
               sx={{ width: "100%" }}
             >
               Add to trips
+
             </Button>
           </Box>
         </CardContent>

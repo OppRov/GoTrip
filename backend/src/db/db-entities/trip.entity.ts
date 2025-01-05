@@ -1,4 +1,4 @@
-import { IsNumber, IsString, IsDateString, IsBoolean, IsArray, IsOptional } from "class-validator";
+import { IsNumber, IsString, IsDateString, IsBoolean, IsArray, IsOptional, IsUrl } from "class-validator";
 import { Column, Entity, ManyToOne, ObjectIdColumn} from "typeorm";
 import { User } from "./user.entity";
 import { Itinerary } from "../../common/interfaces/itinerary.interface";
@@ -31,7 +31,7 @@ export class Trip {
 
     @Column()
     @IsString()
-    location: string;
+    destination: string;
 
     @Column()
     @IsArray()
@@ -44,4 +44,8 @@ export class Trip {
     @Column({ default: 0, type: "int64" })
     @IsNumber()
     ratingCount: number;
+
+    @Column()
+    @IsUrl()
+    imageTrip: string;
 }
