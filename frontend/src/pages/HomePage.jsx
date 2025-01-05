@@ -29,6 +29,7 @@ import { TRIPS_URL } from "../../constants/endpoints";
 
 const HomePage = () => {
   const nav = useNavigate();
+  const [reccomendedTrips, setRecommendedTrips] = useState([]);
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
@@ -44,6 +45,7 @@ const HomePage = () => {
   useEffect(() => {
     if (!loading && !error && data) {
       console.log(data);
+      setRecommendedTrips(data.data);
     }
   }, [data, loading, error]);
 
@@ -99,37 +101,46 @@ const HomePage = () => {
             }}
           >
             {/* Reccomendations section */}
-
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                marginBottom: "25px",
-              }}
-            >
-              <Typography
-                variant="h2"
-                component="h1"
-                textAlign="center"
-                sx={{ color: theme.palette.primary.main, marginBottom: "25px" }}
-              >
-                Recommended Trips
-              </Typography>
+            {reccomendedTrips.length > 0 && (
               <Box
                 sx={{
+                  width: "100%",
                   display: "flex",
-                  flexDirection: "row",
-                  gap: "50px",
-                  justifyContent: "center",
-                  flexWrap: "wrap",
+                  flexDirection: "column",
+                  marginBottom: "25px",
                 }}
               >
-                <TripCard />
-                <TripCard />
-                <TripCard />
+                <Typography
+                  variant="h2"
+                  component="h1"
+                  textAlign="center"
+                  sx={{
+                    color: theme.palette.primary.main,
+                    marginBottom: "25px",
+                  }}
+                >
+                  Recommended Trips
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "50px",
+                    justifyContent: "center",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {reccomendedTrips.map((trip, i) => (
+                    <TripCard
+                      key={i}
+                      id={trip.id}
+                      title={trip.title}
+                      image={trip.image}
+                    />
+                  ))}
+                </Box>
               </Box>
-            </Box>
+            )}
           </Box>
         </Box>
       </Container>
