@@ -8,7 +8,7 @@ export const PlanProvider = ({ children }) => {
     startDate: "",
     endDate: "",
     duration: 0,
-    thumbnail: "",
+    image: "",
   });
 
   useEffect(() => {

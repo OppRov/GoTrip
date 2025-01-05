@@ -362,7 +362,7 @@ const Stage1 = () => {
   useEffect(() => {
     if (!loading && !error && data) {
       console.log(data.data.imageUrls[0]);
-      setPlanData({ ...planData, thumbnail: data.data.imageUrls[0] });
+      setPlanData({ ...planData, image: data.data.imageUrls[0] });
     }
   }, [data, loading, error]);
   return (
@@ -386,12 +386,13 @@ const Stage1 = () => {
       </Typography>
       <Autocomplete
         onInputChange={(e, value) => {
-          setPlanData({ ...planData, destination: value });
+          //   setPlanData({ ...planData, destination: value });
           if (destinations.find((dest) => dest.city === value)) {
             // getImages(value);
             setPlanData({
               ...planData,
-              thumbnail: destinations.find((dest) => dest.city === value).image,
+              destination: value,
+              image: destinations.find((dest) => dest.city === value).image,
             });
             console.log("destination entered");
           }

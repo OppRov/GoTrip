@@ -133,11 +133,11 @@ const TripPlanPage = () => {
             sx={{
               display: "flex",
               justifyContent: "center",
-              alignItems: "center",
+              // alignItems: "center",
             }}
           >
             <TripCard
-              image={planData.thumbnail}
+              image={planData.image}
               destination={planData.destination}
             />
           </Paper>
