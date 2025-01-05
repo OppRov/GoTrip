@@ -137,7 +137,7 @@ const TripPlanPage = () => {
             }}
           >
             <TripCard
-              image={planData.image}
+              imageTrip={planData.image}
               destination={planData.destination}
             />
           </Paper>

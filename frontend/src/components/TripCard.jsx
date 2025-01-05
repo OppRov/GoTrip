@@ -13,12 +13,11 @@ import LoadingOverlay from "./LoadingOverlay";
 import axiosFetch from "../api/axiosFetch";
 import { TRIPS_URL } from "../../constants/endpoints";
 
-const TripCard = ({ imageTrip, destination, itinerary, tripName, preview }) => {
+const TripCard = ({ _id, imageTrip, destination, itinerary, tripName, preview, isAvailable = true, ratingCount }) => {
   // Add to user's trips
   const { data, loading, error, fetchData } = axiosFetch();
 
   const handleAddTrip = () => {
-    console.log("adding trip");
     fetchData({
       url: TRIPS_URL,
       method: "POST",
@@ -26,9 +25,21 @@ const TripCard = ({ imageTrip, destination, itinerary, tripName, preview }) => {
     });
   };
 
+  const handleShareTrip = () => {
+    fetchData({
+      url: TRIPS_URL,
+      method: "PUT",
+      body: {
+          _id,
+          ratingCount: ratingCount+1,
+          recommended: true
+      },
+      token: localStorage.getItem("token")
+    });
+  };
+
   useEffect(() => {
     if (!loading && !error && data) {
-      console.log("test");
       console.log(data);
     } else if (error) {
       console.log(error.status);
@@ -81,14 +92,15 @@ const TripCard = ({ imageTrip, destination, itinerary, tripName, preview }) => {
                 {itinerary?.map(value => value?.events?.map((event, index) => index < 2 ? ' ' + event?.name + ' ' : ''))}
             </Typography>
 
-            <Button
+            {isAvailable ? <Button
               variant="contained"
               onClick={handleAddTrip}
               sx={{ width: "100%" }}
-            >
-              Add to trips
-
-            </Button>
+            > Add to trips </Button> : <Button
+              variant="contained"
+              onClick={handleShareTrip}
+              sx={{ width: "100%" }}
+            > Share </Button> }
           </Box>
         </CardContent>
       </Card>
