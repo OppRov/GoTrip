@@ -38,7 +38,7 @@ const TripPlanPage = () => {
           spacing={2}
           sx={{
             display: "flex",
-            height: "100vh",
+            height: "90vh",
             justifyContent: "space-evenly",
             // alignItems: "center",
             // border: "1px solid red",
@@ -52,7 +52,6 @@ const TripPlanPage = () => {
               elevation={3}
               sx={{
                 height: "100%",
-                // background: theme.palette.secondary.lighter,
               }}
             >
               <Box
@@ -139,6 +138,9 @@ const TripPlanPage = () => {
             <TripCard
               imageTrip={planData.image}
               destination={planData.destination}
+              preview
+              pItinerary={planData.itinerary}
+              tripName={planData.title}
             />
           </Paper>
         </Stack>

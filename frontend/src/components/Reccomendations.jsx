@@ -8,12 +8,11 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 
 const Reccomendations = () => {
-  const [reccomendedTrips, setRecommendedTrips] = useState(Array(6).fill(null));
-  const [currentPage, setCurrentPage] = useState(1);
+  const [reccomendedTrips, setRecommendedTrips] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
   const [visibleTrips, setVisibleTrips] = useState([]);
 
   const { data, loading, error, fetchData } = axiosFetch();
-  console.log(reccomendedTrips.length);
 
   useEffect(() => {
     fetchData({
@@ -25,18 +24,19 @@ const Reccomendations = () => {
   useEffect(() => {
     if (!loading && !error && data) {
       console.log(data);
-      //   setRecommendedTrips(data.data);
+      setRecommendedTrips(data.data);
+      setCurrentPage(1);
     }
   }, [data, loading, error]);
 
   const handlePrev = () => {
-    if (currentPage === 1) setCurrentPage(reccomendedTrips.length / 3);
+    if (currentPage <= 1)
+      setCurrentPage(Math.round(reccomendedTrips.length / 3));
     else setCurrentPage((prevPage) => prevPage - 1);
-    // console.log(currentPage);
   };
 
   const handleNext = () => {
-    if (currentPage === reccomendedTrips.length / 3) setCurrentPage(1);
+    if (currentPage >= reccomendedTrips.length / 3) setCurrentPage(1);
     else setCurrentPage((prevPage) => prevPage + 1);
     // console.log(currentPage);
   };
@@ -75,13 +75,13 @@ const Reccomendations = () => {
               display: "flex",
               flexDirection: "row",
               gap: "50px",
-              justifyContent: "center",
+              justifyContent: "space-between",
               alignItems: "center",
               //   flexWrap: "wrap",
             }}
           >
             <IconButton
-              disabled={currentPage === 1}
+              //   disabled={currentPage === 1}
               onClick={() => handlePrev()}
               size="large"
               color="primary"
@@ -92,13 +92,13 @@ const Reccomendations = () => {
             {visibleTrips.map((trip, i) => (
               <TripCard
                 key={i}
-                // id={trip.id}
-                // title={trip.title}
-                // imageTrip={trip.image}
+                id={trip.id}
+                title={trip.title}
+                imageTrip={trip.image}
               />
             ))}
             <IconButton
-              disabled={currentPage === reccomendedTrips.length / 3}
+              //   disabled={currentPage === reccomendedTrips.length / 3}
               onClick={() => handleNext()}
               color="primary"
               size="large"

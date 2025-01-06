@@ -67,7 +67,11 @@ const HomePage = () => {
                 journey seamless and unforgettable.
               </Typography>
               <Box>
-                <Button variant="contained" onClick={handlePlanClick}>
+                <Button
+                  sx={{ marginTop: "1rem" }}
+                  variant="contained"
+                  onClick={handlePlanClick}
+                >
                   Plan your next trip!
                 </Button>
               </Box>
