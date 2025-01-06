@@ -207,7 +207,15 @@ Time: ${eventInfo.event.start.toLocaleTimeString()} - ${eventInfo.event.end.toLo
     // 2. Store in context
     // 3. Save to localStorage
     // etc.
+    setPlanData({
+      ...planData,
+      itinerary: savedData,
+    });
   };
+
+  useEffect(() => {
+    handleSave();
+  }, [events]);
 
   const handleDateClick = (arg) => {
     // setSelectedDate(arg.date);

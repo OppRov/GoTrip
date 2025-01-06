@@ -65,7 +65,7 @@ const TripCard = ({
             width: 280,
             background: theme.palette.secondary.lighter,
             borderRadius: "10px",
-            height: "400px",
+            height: preview ? "100%" : "400px",
             p: 0,
           }}
         >
@@ -90,11 +90,11 @@ const TripCard = ({
                 borderRadius: "10px",
                 background: "white",
                 marginTop: "10px",
-                height: "188px",
+                height: preview ? "435px" : "188px",
                 padding: "1rem",
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "space-between",
+                justifyContent: "",
               }}
             >
               <Typography variant="h4">{tripName}</Typography>

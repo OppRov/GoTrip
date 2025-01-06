@@ -9,6 +9,7 @@ export const PlanProvider = ({ children }) => {
     endDate: "",
     duration: 0,
     image: "",
+    itinerary: [],
   });
 
   useEffect(() => {
