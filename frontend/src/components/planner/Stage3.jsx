@@ -6,7 +6,7 @@ import { fromDate } from "@internationalized/date";
 
 const Stage3 = () => {
   const { data, loading, error, fetchData } = axiosFetch();
-  const [planData, setPlanData] = useContext(planContext);
+  const { planData, setPlanData } = useContext(planContext);
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   const handleCreateTrip = () => {
