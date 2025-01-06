@@ -31,7 +31,7 @@ export class Trip {
 
     @Column()
     @IsString()
-    destination: string;
+    location: string;
 
     @Column()
     @IsArray()
