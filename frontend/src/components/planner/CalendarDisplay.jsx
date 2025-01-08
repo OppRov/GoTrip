@@ -106,19 +106,43 @@ export default function CalendarDisplay() {
   };
 
   const handleEventDrop = (info) => {
-    setEvents((prev) => {
-      const otherEvents = prev.filter((event) => event.id !== info.event.id);
-      return [
-        ...otherEvents,
-        {
-          id: info.event.id,
-          title: info.event.title,
-          start: info.event.start,
-          end: info.event.end,
-          extendedProps: info.event.extendedProps,
-          allDay: false,
-        },
-      ];
+    const { event } = info;
+    const date = event.start.toISOString().split("T")[0];
+
+    // Create new itinerary object
+    const newItinerary = { ...planData.itinerary };
+
+    // Remove event from old date if it exists
+    Object.keys(newItinerary).forEach((day) => {
+      newItinerary[day] =
+        newItinerary[day]?.filter((e) => e.id !== event.id) || [];
+    });
+
+    // Initialize array for the date if it doesn't exist
+    if (!newItinerary[date]) {
+      newItinerary[date] = [];
+    }
+
+    // Add event to new date
+    const updatedEvent = {
+      id: event.id,
+      title: event.title,
+      start: event.start,
+      end: event.end,
+      location: event.extendedProps.location,
+      description: event.extendedProps.description,
+      // preserve any other properties you need
+    };
+
+    newItinerary[date].push(updatedEvent);
+
+    // Sort events by start time
+    newItinerary[date].sort((a, b) => new Date(a.start) - new Date(b.start));
+
+    // Update planData with new itinerary
+    setPlanData({
+      ...planData,
+      itinerary: newItinerary,
     });
   };
 
@@ -183,7 +207,15 @@ Time: ${eventInfo.event.start.toLocaleTimeString()} - ${eventInfo.event.end.toLo
     // 2. Store in context
     // 3. Save to localStorage
     // etc.
+    setPlanData({
+      ...planData,
+      itinerary: savedData.events,
+    });
   };
+
+  useEffect(() => {
+    handleSave();
+  }, [events]);
 
   const handleDateClick = (arg) => {
     // setSelectedDate(arg.date);

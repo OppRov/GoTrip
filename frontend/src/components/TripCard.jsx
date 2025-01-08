@@ -5,16 +5,26 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Paper,
   Typography,
+  CardActions,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { theme } from "../themes/AppTheme";
 import LoadingOverlay from "./LoadingOverlay";
 import axiosFetch from "../api/axiosFetch";
 import { TRIPS_URL } from "../../constants/endpoints";
 
-const TripCard = ({ _id, imageTrip, destination, itinerary, tripName, preview, isAvailable = true, ratingCount, otherButton }) => {
-  // Add to user's trips
+const TripCard = ({
+  _id,
+  imageTrip,
+  destination,
+  itinerary,
+  tripName,
+  preview,
+  isAvailable = true,
+  ratingCount,
+}) => {
   const { data, loading, error, fetchData } = axiosFetch();
 
   const handleAddTrip = () => {
@@ -30,81 +40,139 @@ const TripCard = ({ _id, imageTrip, destination, itinerary, tripName, preview, i
       url: TRIPS_URL,
       method: "PUT",
       body: {
-          _id,
-          ratingCount: ratingCount+1,
-          recommended: true
+        _id,
+        ratingCount: ratingCount + 1,
+        recommended: true,
       },
-      token: localStorage.getItem("token")
+      token: localStorage.getItem("token"),
     });
   };
 
-  useEffect(() => {
-    if (!loading && !error && data) {
-      console.log(data);
-    } else if (error) {
-      console.log(error.status);
-    }
-  }, [data, loading, error]);
+  // Preview placeholder data
+  const previewData = {
+    image: "https://placehold.co/345x140/e0e0e0/ffffff",
+    tripName: "",
+    destination: "Location",
+    itinerary: [
+      {
+        date: new Date(),
+        events: [
+          { time: "09:00", name: "Event 1" },
+          { time: "14:00", name: "Event 2" },
+        ],
+      },
+      {
+        date: new Date(Date.now() + 86400000),
+        events: [
+          { time: "10:00", name: "Event 1" },
+          { time: "15:00", name: "Event 2" },
+        ],
+      },
+    ],
+  };
+
+  // Use preview data or actual data
+  const displayImage = preview || !imageTrip ? previewData.image : imageTrip;
+  const displayTripName =
+    preview || !tripName ? previewData.tripName : tripName;
+  const displayDestination =
+    preview || !destination ? previewData.destination : destination;
+  const displayItinerary =
+    preview || !itinerary ? previewData.itinerary : itinerary;
 
   return (
-    <>
-      <LoadingOverlay open={false} />
+    <Paper elevation={3} sx={{ height: "100%", width: "300px" }}>
       <Card
         sx={{
-          width: 280,
-          background: theme.palette.tertiary.main,
-          borderRadius: "10px",
-          height: "400px",
-          p: 0,
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+          width: "300px",
+          minWidth: "300px",
+          maxWidth: "300px",
+          opacity: preview ? 0.7 : 1,
         }}
       >
-        <CardContent
-          sx={{ p: 1, display: "flex", flexDirection: "column", gap: "10px" }}
-        >
-          <CardMedia>
-            <img
-              onError={(e) => {
-                e.target.src =
-                  "https://dispatcheseurope.com/wp-content/uploads/2016/05/Berlin2.jpg";
-              }}
-              src={imageTrip}
-              alt=""
-              style={{ borderRadius: "10px" }}
-              className="w-full h-40 object-fill"
-            />
-          </CardMedia>
-
-          <Box
-            sx={{
-              borderRadius: "10px",
-              background: "white",
-              marginTop: "10px",
-              height: "188px",
-              padding: "1rem",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
+        <CardMedia
+          component="img"
+          height={140}
+          width={300}
+          image={displayImage}
+          alt={displayDestination}
+          sx={{
+            objectFit: "cover",
+            bgcolor: preview ? "grey.200" : "inherit",
+            height: "140px",
+            minHeight: "140px",
+            maxHeight: "140px",
+            width: "300px",
+            minWidth: "300px",
+            maxWidth: "300px",
+          }}
+        />
+        <CardContent sx={{ flexGrow: 1, pt: 1 }}>
+          <Typography
+            gutterBottom
+            variant="h6"
+            component="div"
+            noWrap
+            sx={{ bgcolor: preview ? "grey.100" : "inherit" }}
           >
-            <Typography variant="h4">{tripName}</Typography>
-            <Typography variant="h5">Destination: {destination}</Typography>
-            <Typography variant="h5" height="4rem">Activities:
-                {itinerary?.map(value => value?.events?.map((event, index) => index < 2 ? ' ' + event?.name + ' ' : ''))}
-            </Typography>
+            {displayTripName}
+          </Typography>
+          <Typography
+            variant="h6"
+            color="text.secondary"
+            gutterBottom
+            noWrap
+            sx={{ bgcolor: preview ? "grey.100" : "inherit" }}
+          >
+            {displayDestination}
+          </Typography>
 
-            {isAvailable ? <Button
-              variant="contained"
-              onClick={handleAddTrip}
-              sx={{ width: "100%" }}
-            > Add to trips </Button> : <Button
-              variant="contained"
-              onClick={handleShareTrip}
-              sx={{ width: "100%" }}
-            > Share </Button> }
-          </Box>
+          {(displayItinerary || [])?.slice(0, 2).map((event, index) => (
+            <Box key={index} sx={{ mb: 1 }}>
+              <Typography variant="subtitle2" color="text.secondary">
+                {new Date(event.start).toLocaleDateString()}
+              </Typography>
+              <Typography
+                variant="body2"
+                noWrap
+                sx={{ bgcolor: preview ? "grey.100" : "inherit" }}
+              >
+                {new Date(event.start).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+                - {event.title}
+              </Typography>
+            </Box>
+          ))}
+          {displayItinerary?.length > 2 && (
+            <Typography variant="body2" color="primary">
+              +{displayItinerary.length - 2} more events
+            </Typography>
+          )}
         </CardContent>
+        <CardActions sx={{ p: 2, pt: 0 }}>
+          <Button
+            variant="contained"
+            onClick={
+              preview
+                ? undefined
+                : isAvailable
+                  ? handleAddTrip
+                  : handleShareTrip
+            }
+            fullWidth
+            size="small"
+            disabled={preview && !isAvailable}
+          >
+            {isAvailable ? "Add to trips" : "Share"}
+          </Button>
+        </CardActions>
       </Card>
-    </>
+    </Paper>
   );
 };
 

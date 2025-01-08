@@ -25,30 +25,21 @@ import { theme } from "../themes/AppTheme";
 import TripCard from "../components/TripCard";
 import { useNavigate } from "react-router-dom";
 import axiosFetch from "../api/axiosFetch";
-import { TRIPS_URL } from "../../constants/endpoints";
+import { TRIPS_URL, USER_URL } from "../../constants/endpoints";
+import Reccomendations from "../components/Reccomendations";
 
 const HomePage = () => {
   const nav = useNavigate();
-  const [reccomendedTrips, setRecommendedTrips] = useState([]);
 
   const { data, loading, error, fetchData } = axiosFetch();
 
-  useEffect(() => {
-    fetchData({
-      url: `${TRIPS_URL}/getRecommendedTrips`,
-      method: "GET",
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!loading && !error && data) {
-      console.log(data);
-      setRecommendedTrips(data.data);
-    }
-  }, [data, loading, error]);
-
   const handlePlanClick = () => {
     //check if user is logged in by sending a request
+    if (!userInfo) {
+      nav("/login");
+      return;
+    }
+
     nav("/planner");
   };
 
@@ -81,7 +72,11 @@ const HomePage = () => {
                 journey seamless and unforgettable.
               </Typography>
               <Box>
-                <Button variant="contained" onClick={handlePlanClick}>
+                <Button
+                  sx={{ marginTop: "1rem" }}
+                  variant="contained"
+                  onClick={handlePlanClick}
+                >
                   Plan your next trip!
                 </Button>
               </Box>
@@ -99,46 +94,7 @@ const HomePage = () => {
             }}
           >
             {/* Reccomendations section */}
-            {reccomendedTrips.length > 0 && (
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  marginBottom: "25px",
-                }}
-              >
-                <Typography
-                  variant="h2"
-                  component="h1"
-                  textAlign="center"
-                  sx={{
-                    color: theme.palette.primary.main,
-                    marginBottom: "25px",
-                  }}
-                >
-                  Recommended Trips
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "50px",
-                    justifyContent: "center",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  {reccomendedTrips.map((trip, i) => (
-                    <TripCard
-                      key={i}
-                      id={trip.id}
-                      title={trip.title}
-                      imageTrip={trip.image}
-                    />
-                  ))}
-                </Box>
-              </Box>
-            )}
+            <Reccomendations />
           </Box>
         </Box>
       </Container>
