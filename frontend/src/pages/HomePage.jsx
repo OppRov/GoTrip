@@ -25,7 +25,7 @@ import { theme } from "../themes/AppTheme";
 import TripCard from "../components/TripCard";
 import { useNavigate } from "react-router-dom";
 import axiosFetch from "../api/axiosFetch";
-import { TRIPS_URL } from "../../constants/endpoints";
+import { TRIPS_URL, USER_URL } from "../../constants/endpoints";
 import Reccomendations from "../components/Reccomendations";
 
 const HomePage = () => {
@@ -33,8 +33,15 @@ const HomePage = () => {
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
+  const { data, loading, error, fetchData } = axiosFetch();
+
   const handlePlanClick = () => {
     //check if user is logged in by sending a request
+    if (!userInfo) {
+      nav("/login");
+      return;
+    }
+
     nav("/planner");
   };
 

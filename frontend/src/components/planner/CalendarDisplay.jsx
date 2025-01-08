@@ -209,7 +209,7 @@ Time: ${eventInfo.event.start.toLocaleTimeString()} - ${eventInfo.event.end.toLo
     // etc.
     setPlanData({
       ...planData,
-      itinerary: savedData,
+      itinerary: savedData.events,
     });
   };
 

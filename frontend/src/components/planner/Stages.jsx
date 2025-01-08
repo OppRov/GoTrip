@@ -15,6 +15,7 @@ import { SystemColors } from "../../themes/SystemColors";
 import Stage1 from "./Stage1";
 import Stage2 from "./Stage2";
 import Stage3 from "./Stage3";
+import Stage4 from "./Stage4";
 
 const StageList = [
   //Stage 1 destination selection and trip duration selection
@@ -24,6 +25,7 @@ const StageList = [
   <Stage2 />,
 
   <Stage3 />,
+  <Stage4 />,
 ];
 
 //Page through the stages with a next and back button at the bottom

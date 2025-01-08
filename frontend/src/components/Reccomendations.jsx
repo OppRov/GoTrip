@@ -90,12 +90,7 @@ const Reccomendations = () => {
             </IconButton>
 
             {visibleTrips.map((trip, i) => (
-              <TripCard
-                key={i}
-                id={trip.id}
-                title={trip.title}
-                imageTrip={trip.image}
-              />
+              <TripCard key={i} {...trip} />
             ))}
             <IconButton
               //   disabled={currentPage === reccomendedTrips.length / 3}

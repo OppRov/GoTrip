@@ -7,8 +7,14 @@ import {
   MobileStepper,
   Paper,
   Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Rating,
+  DialogActions,
+  Typography,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Stages from "../components/planner/Stages";
 import { planContext, PlanProvider } from "../contexts/planContext";
 import ResultView from "../components/planner/ResultView";
@@ -16,12 +22,55 @@ import { theme } from "../themes/AppTheme";
 
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import TripCard from "../components/TripCard";
+import axiosFetch from "../api/axiosFetch";
+import { TRIPS_URL } from "../../constants/endpoints";
 
 const TripPlanPage = () => {
-  // const [currentTrip, setCurrentTrip] = useState({});
   const [currentStage, setCurrentStage] = useState(0);
-
+  const [openRatingModal, setOpenRatingModal] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [latestTrip, setLatestTrip] = useState(null);
   const { planData } = useContext(planContext);
+
+  const { data, loading, error, fetchData } = axiosFetch();
+
+  // Fetch latest unrated trip when component mounts
+  useEffect(() => {
+    const fetchLatestTrip = async () => {
+      try {
+        await fetchData({
+          url: `${TRIPS_URL}/getLatestUnratedTrip/${JSON.parse(localStorage.getItem("userInfo"))?.id}`,
+          method: "GET",
+          token: localStorage.getItem("token"),
+        });
+      } catch (err) {
+        console.error("Error fetching latest trip:", err);
+      }
+    };
+
+    fetchLatestTrip();
+  }, []);
+
+  useEffect(() => {
+    if (!loading && !error && data?.data) {
+      setLatestTrip(data.data);
+      setOpenRatingModal(!!data.data);
+    }
+  }, [data, loading, error]);
+
+  const handleRatingSubmit = async () => {
+    try {
+      await fetchData({
+        url: `${TRIPS_URL}/rateTrip/${latestTrip.id}`,
+        method: "POST",
+        data: { rating },
+        token: localStorage.getItem("token"),
+      });
+      setOpenRatingModal(false);
+    } catch (err) {
+      console.error("Error submitting rating:", err);
+    }
+  };
 
   const handleBack = () => {
     setCurrentStage((prev) => prev - 1);
@@ -32,6 +81,31 @@ const TripPlanPage = () => {
 
   return (
     <>
+      <Dialog open={openRatingModal} onClose={() => setOpenRatingModal(false)}>
+        <DialogTitle>Rate Your Trip to {latestTrip?.destination}</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1" gutterBottom>
+            How would you rate your recent trip?
+          </Typography>
+          <Rating
+            value={rating}
+            onChange={(event, newValue) => setRating(newValue)}
+            size="large"
+            precision={0.5}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenRatingModal(false)}>Skip</Button>
+          <Button
+            onClick={handleRatingSubmit}
+            variant="contained"
+            disabled={!rating}
+          >
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Container>
         <Stack
           direction={{ sm: "column", md: "row" }}
@@ -73,7 +147,7 @@ const TripPlanPage = () => {
               <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
                 <MobileStepper
                   variant="progress"
-                  steps={3}
+                  steps={4}
                   position="static"
                   activeStep={currentStage}
                   sx={{ mt: "1rem", maxWidth: "100%", flexGrow: 1 }}
@@ -81,7 +155,7 @@ const TripPlanPage = () => {
                     <Button
                       size="small"
                       onClick={handleNext}
-                      disabled={currentStage === 2}
+                      disabled={currentStage === 3}
                     >
                       Next
                       {theme.direction === "rtl" ? (
@@ -128,21 +202,24 @@ const TripPlanPage = () => {
               <ResultView />
             </Stack>
           </Paper>
-          <Paper
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              // alignItems: "center",
-            }}
-          >
-            <TripCard
-              imageTrip={planData.image}
-              destination={planData.destination}
-              preview
-              pItinerary={planData.itinerary}
-              tripName={planData.title}
-            />
-          </Paper>
+          {currentStage < 2 && (
+            <Paper
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                // alignItems: "center",
+              }}
+            >
+              <TripCard
+                imageTrip={planData.image}
+                destination={planData.destination}
+                // preview
+                isAvailable={false}
+                tripName={planData.title}
+                itinerary={planData.itinerary}
+              />
+            </Paper>
+          )}
         </Stack>
       </Container>
     </>

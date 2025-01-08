@@ -5,12 +5,16 @@ import { useState, useContext, useEffect } from "react";
 import { planContext } from "../../contexts/planContext";
 import { TRIPS_URL } from "../../../constants/endpoints";
 import axiosFetch from "../../api/axiosFetch";
+import WbSunnyIcon from "@mui/icons-material/WbSunny";
+import AirIcon from "@mui/icons-material/Air";
+import OpacityIcon from "@mui/icons-material/Opacity";
 
 const Stage1 = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [days, setDays] = useState(0);
   const [destinationEntered, setDestinationEntered] = useState(false);
+  const [weather, setWeather] = useState(null);
 
   const { setPlanData, planData } = useContext(planContext);
 
@@ -365,6 +369,31 @@ const Stage1 = () => {
       setPlanData({ ...planData, image: data.data.imageUrls[0] });
     }
   }, [data, loading, error]);
+
+  const fetchWeather = async (city) => {
+    try {
+      const cleanCity = city.split(",")[0]; // Take only the city name before the comma
+      await fetchData({
+        url: `${TRIPS_URL}/weather/${cleanCity}`,
+        method: "GET",
+        token: localStorage.getItem("token"),
+      });
+    } catch (error) {
+      console.error("Error fetching weather:", error);
+    }
+  };
+
+  const handleDestinationChange = (e, value) => {
+    if (destinations.find((dest) => dest.city === value)) {
+      setPlanData({
+        ...planData,
+        destination: value,
+        image: destinations.find((dest) => dest.city === value).image,
+      });
+      fetchWeather(value);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -385,18 +414,7 @@ const Stage1 = () => {
         Stage 1
       </Typography>
       <Autocomplete
-        onInputChange={(e, value) => {
-          //   setPlanData({ ...planData, destination: value });
-          if (destinations.find((dest) => dest.city === value)) {
-            // getImages(value);
-            setPlanData({
-              ...planData,
-              destination: value,
-              image: destinations.find((dest) => dest.city === value).image,
-            });
-            console.log("destination entered");
-          }
-        }}
+        onInputChange={handleDestinationChange}
         value={planData.destination}
         disablePortal
         id="combo-box-demo"
@@ -433,17 +451,38 @@ const Stage1 = () => {
         label="Trip Duration"
       />
 
-      <TextField
-        id="outlined-basic"
-        label="Budget"
-        variant="outlined"
-        type="number"
-        onChange={(e) => {
-          const value = parseInt(e.target.value, 10);
-          setPlanData({ ...planData, budget: value });
-        }}
-        slotProps={{ input: { min: 0 } }}
-      />
+      {weather && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+            padding: 2,
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            borderRadius: 1,
+            backdropFilter: "blur(10px)",
+          }}
+        >
+          <Typography variant="h6" sx={{ marginBottom: 1 }}>
+            Current Weather
+          </Typography>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <WbSunnyIcon />
+            <Typography>Temperature: {weather.temperature}°C</Typography>
+          </Box>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <OpacityIcon />
+            <Typography>Humidity: {weather.humidity}%</Typography>
+          </Box>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <AirIcon />
+            <Typography>Wind: {weather.windSpeed} km/h</Typography>
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 };

@@ -25,6 +25,7 @@ export default function axiosFetch() {
       );
 
       setData(response.data);
+      return response.data;
     } catch (err) {
       console.log({ err });
       if (err.response) {
