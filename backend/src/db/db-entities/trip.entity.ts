@@ -1,7 +1,7 @@
 import { IsNumber, IsString, IsDateString, IsBoolean, IsArray, IsOptional, IsUrl } from "class-validator";
 import { Column, Entity, ManyToOne, ObjectIdColumn} from "typeorm";
 import { User } from "./user.entity";
-import { Itinerary } from "../../common/interfaces/itinerary.interface";
+import { Events } from "../../common/interfaces/events.interface";
 
 @Entity()
 export class Trip {
@@ -35,7 +35,7 @@ export class Trip {
 
     @Column()
     @IsArray()
-    itinerary: Itinerary [];
+    events: Events [];
 
     @Column({ default: false, type: "bool" })
     @IsBoolean()

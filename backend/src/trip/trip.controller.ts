@@ -25,9 +25,10 @@ class TripController {
     }
 
     public findAll(): void {
-        this.app.get(`/${this.ROUTE_NAME}/getAllTripsUser/:id`, async (req: Request, res: Response) => {
+        this.app.get(`/${this.ROUTE_NAME}/getAllTripsUser/:id?`, async (req: Request, res: Response) => {
             try {
-                const trips: [] | Trip[] = await this.service.findAllTrips(req.params.id)
+                let emptyOptions = {};
+                const trips: [] | Trip[] = await this.service.findAllTrips(req.params.id, !req.params.id ? emptyOptions : '')
                 this.innerResponse.data = trips;
                 this.innerResponse.message = "Success";
                 if (!trips.length) throw new Error("There is no trips");

@@ -34,19 +34,12 @@ const TripListPage = () => {
     setTrips(newArrTrips);
   };
 
-    useEffect(() => {
-        async function getData() {
-            try {
-                await fetchData({
-                    url: `${TRIPS_URL}/getAllTripsUser/${userInfo?.id}`,
-                    method: "GET",
-                    token: localStorage.getItem("token"),
-                })
-            } catch (err) {
-                console.error(err);
-            }
-        }
-        getData();
+  useEffect(() => {
+    fetchData({
+        url: `${TRIPS_URL}/getAllTripsUser/${userInfo?.id}`,
+        method: "GET",
+        token: localStorage.getItem("token"),
+    })
   }, []);
 
   useEffect(() => {

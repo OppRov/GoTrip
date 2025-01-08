@@ -12,12 +12,12 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../hooks/useUserContext";
 
-const pages = ["My Trips", "Budgets"];
+const pages = ["My Trips", "Budgets"]
 const settings = ["Profile", "Account", "Logout"];
 const logging = ["Login", "Register"];
 
@@ -28,6 +28,11 @@ function ResponsiveAppBar() {
   const nav = useNavigate();
 
   const { user, setUser } = useUserContext();
+
+  useEffect(() => {
+    console.log("USER", user);
+    if (user?.role === "admin") pages.push("admin panel");
+  }, [user]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -41,6 +46,7 @@ function ResponsiveAppBar() {
     const id = e.currentTarget.id;
     console.log(id);
     if (id === "My Trips") nav("/trips");
+    else if (id === "admin panel") nav("/adminPanel");
 
     setAnchorElNav(null);
   };
@@ -147,27 +153,28 @@ function ResponsiveAppBar() {
               GOTRIP
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page}
-                  id={page}
-                  onClick={handleCloseNavMenu}
-                  variant="text"
-                  sx={{
-                    my: 2,
-                    color: "white",
-                    display: "block",
-                    "&:hover": {
-                      backgroundColor: "primary.light",
-                      // transform: "scale(1.1)",
-                      translate: "0px -2px",
-                      transition: "all 0.15s ease-in-out",
-                    },
-                  }}
-                >
-                  {page}
-                </Button>
-              ))}
+              {pages.map((page) => {
+                  return (
+                    <Button
+                        key={page}
+                        id={page}
+                        onClick={handleCloseNavMenu}
+                        variant="text"
+                        sx={{
+                            my: 2,
+                            color: "white",
+                            display: "block",
+                            "&:hover": {
+                                backgroundColor: "primary.light",
+                                // transform: "scale(1.1)",
+                                translate: "0px -2px",
+                                transition: "all 0.15s ease-in-out",
+                            },
+                        }}>
+                        {page}
+                    </Button>
+                  )
+              })}
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
