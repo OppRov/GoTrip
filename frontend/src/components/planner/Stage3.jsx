@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import axiosFetch from "../../api/axiosFetch";
 import { planContext } from "../../contexts/planContext";
 import { fromDate } from "@internationalized/date";
+import MapDisplay from "../MapDisplay";
 
 const Stage3 = () => {
   const { data, loading, error, fetchData } = axiosFetch();
@@ -30,10 +31,10 @@ const Stage3 = () => {
   };
 
   return (
-    <div>
+    <>
       <Typography variant="h4">Stage 3</Typography>
-      {/* Checkout and trip creation */}
-    </div>
+      <MapDisplay />
+    </>
   );
 };
 
