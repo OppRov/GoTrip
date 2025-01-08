@@ -6,3 +6,4 @@ export const PROFILE_ROUTE = "/profile";
 export const SETTINGS_ROUTE = "/settings";
 export const TRIPS_ROUTE = "/trips";
 export const PLANNER_ROUTE = "/planner";
+export const ADMIN_PANEL_ROUTE = "adminPanel";

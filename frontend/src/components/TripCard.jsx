@@ -13,7 +13,7 @@ import LoadingOverlay from "./LoadingOverlay";
 import axiosFetch from "../api/axiosFetch";
 import { TRIPS_URL } from "../../constants/endpoints";
 
-const TripCard = ({ _id, imageTrip, destination, itinerary, tripName, preview, isAvailable = true, ratingCount }) => {
+const TripCard = ({ _id, imageTrip, destination, itinerary, tripName, preview, isAvailable = true, ratingCount, otherButton }) => {
   // Add to user's trips
   const { data, loading, error, fetchData } = axiosFetch();
 

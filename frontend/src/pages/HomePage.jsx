@@ -31,8 +31,6 @@ const HomePage = () => {
   const nav = useNavigate();
   const [reccomendedTrips, setRecommendedTrips] = useState([]);
 
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
   const { data, loading, error, fetchData } = axiosFetch();
 
   useEffect(() => {
