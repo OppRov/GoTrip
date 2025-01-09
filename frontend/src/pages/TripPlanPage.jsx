@@ -207,16 +207,17 @@ const TripPlanPage = () => {
               sx={{
                 display: "flex",
                 justifyContent: "center",
-                // alignItems: "center",
               }}
             >
               <TripCard
                 imageTrip={planData.image}
-                destination={planData.destination}
-                // preview
+                location={planData.destination}
+                preview={true}
                 isAvailable={false}
                 tripName={planData.title}
-                itinerary={planData.itinerary}
+                fromDate={planData.startDate}
+                toDate={planData.endDate}
+                planData={planData}
               />
             </Paper>
           )}

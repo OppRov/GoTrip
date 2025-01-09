@@ -33,6 +33,8 @@ const HomePage = () => {
 
   const { data, loading, error, fetchData } = axiosFetch();
 
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
   const handlePlanClick = () => {
     //check if user is logged in by sending a request
     if (!userInfo) {

@@ -16,28 +16,34 @@ const Stage4 = () => {
       return;
     }
 
-    const formattedItinerary = planData.itinerary.reduce((acc, event) => {
-      const date = event.start.split("T")[0];
-      const existingDateEntry = acc.find((item) => item.date.startsWith(date));
+    const formattedItinerary = planData.events.map((event) => ({
+      id: event.start,
+      title: event.title,
+      address: event.address || "",
+      start: event.start,
+      end:
+        event.end ||
+        new Date(
+          new Date(event.start).getTime() + 60 * 60 * 1000,
+        ).toISOString(),
+    }));
 
-      if (existingDateEntry) {
-        existingDateEntry.events.push({
-          name: event.title,
-          time: event.start.split("T")[1].substring(0, 5),
-        });
-      } else {
-        acc.push({
-          date: event.start,
-          events: [
-            {
-              name: event.title,
-              time: event.start.split("T")[1].substring(0, 5),
-            },
-          ],
-        });
-      }
-      return acc;
-    }, []);
+    // Debug logs
+    console.log("userInfo:", userInfo);
+    console.log("planData:", planData);
+    console.log("formattedItinerary:", formattedItinerary);
+    console.log("Full request body:", {
+      userID: userInfo?.id,
+      tripName: tripName,
+      fromDate: planData.startDate.split("T")[0],
+      toDate: planData.endDate.split("T")[0],
+      budget: planData.budget || 0,
+      location: planData.destination,
+      events: formattedItinerary,
+      recommended: false,
+      ratingCount: 0,
+      imageTrip: planData.image,
+    });
 
     fetchData({
       url: TRIPS_URL,
@@ -50,7 +56,7 @@ const Stage4 = () => {
         toDate: planData.endDate,
         budget: planData.budget || 0,
         location: planData.destination,
-        itinerary: formattedItinerary,
+        events: formattedItinerary,
         recommended: false,
         ratingCount: 0,
         imageTrip: planData.image,

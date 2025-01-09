@@ -22,7 +22,7 @@ const Stage3 = () => {
         toDate: planData.endDate,
         budget: planData.budget,
         destination: planData.destination,
-        itinerary: planData.itinerary,
+        events: planData.events,
         recommended: false,
         ratingCount: 0,
         tripImage: planData.image,
