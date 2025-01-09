@@ -30,17 +30,16 @@ const MapDisplay = () => {
   const [travelMode, setTravelMode] = useState("DRIVING");
 
   // Group events by date using start time
-  const eventsByDate = planData?.itinerary
-    ? planData.itinerary.reduce((acc, event) => {
-        if (!event?.start) return acc; // Skip if no start date
-
-        const date = event.start.split("T")[0]; // Get just the date part
+  const eventsByDate = planData?.events
+    ? planData.events.reduce((acc, event) => {
+        if (!event?.start) return acc;
+        const date = event.start.split("T")[0];
         if (!acc[date]) {
           acc[date] = [];
         }
         acc[date].push({
           ...event,
-          location: event.address, // Map address to location for Directions component
+          location: event.address,
         });
         return acc;
       }, {})

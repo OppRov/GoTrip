@@ -189,14 +189,16 @@ Time: ${eventInfo.event.start.toLocaleTimeString()} - ${eventInfo.event.end.toLo
       address: event.extendedProps?.address,
     }));
 
-    const calendarData = {
+    setPlanData({
+      ...planData,
+      events: calendarEvents,
+    });
+
+    return {
       events: calendarEvents,
       totalEvents: calendarEvents.length,
       lastUpdated: new Date().toISOString(),
     };
-
-    // console.log("Calendar Data:", calendarData);
-    return calendarData;
   };
 
   const handleSave = () => {
@@ -209,7 +211,7 @@ Time: ${eventInfo.event.start.toLocaleTimeString()} - ${eventInfo.event.end.toLo
     // etc.
     setPlanData({
       ...planData,
-      itinerary: savedData.events,
+      events: savedData.events,
     });
   };
 
