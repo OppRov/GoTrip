@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "bk": "npm run dev --prefix backend",
     "cl": "npm run dev --prefix frontend",
-    "build": "npm i --prefix backend && npm i --prefix frontend && npm run build --prefix frontend",
-    "start": "npx cross-env NODE_ENV=production --prefix backend && node index.ts --prefix backend"
+    "build": "npm i --prefix backend && npm run build --prefix backend && npm i --prefix frontend && npm run build --prefix frontend",
+    "start": "cd backend && npx cross-env NODE_ENV=production && npm run start"
   },
   "keywords": [],
   "author": "",
