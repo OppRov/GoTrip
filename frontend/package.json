@@ -31,6 +31,7 @@
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "framer-motion": "^11.15.0",
+    "gotrip": "file:..",
     "jsencrypt": "^3.3.2",
     "motion": "^11.15.0",
     "react": "^18.3.1",

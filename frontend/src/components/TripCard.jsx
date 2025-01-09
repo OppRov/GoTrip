@@ -10,8 +10,13 @@ import {
   CardActions,
   IconButton,
   Collapse,
+  Modal,
+  TextField,
+  Link,
+  Snackbar,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const TripCard = ({
   _id,
@@ -28,9 +33,27 @@ const TripCard = ({
   planData,
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const [openShareModal, setOpenShareModal] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const handleOpenShare = () => {
+    setOpenShareModal(true);
+  };
 
   const handleToggleExpand = () => {
     setExpanded((prev) => !prev);
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(`https://example.com/trip/${_id}`);
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
   };
 
   const displayImage = preview
@@ -40,6 +63,51 @@ const TripCard = ({
 
   return (
     <Paper elevation={3} sx={{ width: "300px" }}>
+      <Modal open={openShareModal} onClose={() => setOpenShareModal(false)}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            borderRadius: 2,
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Typography variant="h6" gutterBottom>
+            Share Trip
+          </Typography>
+          <TextField
+            label="Trip URL"
+            value={`https://example.com/trip/${_id}`}
+            fullWidth
+            InputProps={{
+              readOnly: true,
+              endAdornment: (
+                <IconButton edge="end" onClick={handleCopyLink}>
+                  <ContentCopyIcon />
+                </IconButton>
+              ),
+            }}
+            sx={{ mb: 2 }}
+          />
+          <Typography>
+            Share this link with others to invite them to view or collaborate on
+            this trip.
+          </Typography>
+        </Box>
+      </Modal>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        message="Link copied to clipboard"
+      />
+
       <Card
         sx={{
           display: "flex",
@@ -127,10 +195,10 @@ const TripCard = ({
             <CardActions sx={{ p: 2, pt: 0 }}>
               <Button
                 variant="contained"
-                onClick={isAvailable ? () => {} : undefined}
+                onClick={handleOpenShare}
                 fullWidth
                 size="small"
-                disabled={!isAvailable}
+                // disabled={!isAvailable}
               >
                 {isAvailable ? "Add to trips" : "Share"}
               </Button>
