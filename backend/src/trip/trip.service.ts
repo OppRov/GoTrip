@@ -41,6 +41,7 @@ class TripService {
             const tripData: Trip = this.manager.create<Trip, Trip>(Trip, trip);
             if (await this.findOneTrip(tripData._id)) throw new Error("Trip with this ID already exist")
             const validate: [] | string[] = await validateObject(tripData);
+            // FIXME: Error here.
             trip.events.map((event: Events, index1: number) => {
                 if (!isDateString(event.id) || !isString(event.title) || !isString(event.address) || !isString(event.start) || !isString(event.end)) throw new Error("Events object is not valid, please check it.");
             });
