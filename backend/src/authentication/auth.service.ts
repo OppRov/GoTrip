@@ -38,7 +38,7 @@ class AuthService {
                 email: user.email,
                 password: user.password
             };
-            const privateKey: string = readFileSync("RSA-keys/private.pem", "utf8");
+            const privateKey: string = process.env.TOKEN_SECRET_KEY!;
             token = sign(userCredentials, privateKey, { algorithm: "RS512",expiresIn: "1d" });
             if (typeof token !== "string" && !token) {
                 credentialsStatus.emailOK = false;
