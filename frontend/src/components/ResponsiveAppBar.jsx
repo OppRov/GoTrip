@@ -17,7 +17,7 @@ import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../hooks/useUserContext";
 
-const pages = ["My Trips", "Budgets"]
+const pages = ["My Trips"];
 const settings = ["Profile", "Account", "Logout"];
 const logging = ["Login", "Register"];
 
@@ -154,26 +154,27 @@ function ResponsiveAppBar() {
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => {
-                  return (
-                    <Button
-                        key={page}
-                        id={page}
-                        onClick={handleCloseNavMenu}
-                        variant="text"
-                        sx={{
-                            my: 2,
-                            color: "white",
-                            display: "block",
-                            "&:hover": {
-                                backgroundColor: "primary.light",
-                                // transform: "scale(1.1)",
-                                translate: "0px -2px",
-                                transition: "all 0.15s ease-in-out",
-                            },
-                        }}>
-                        {page}
-                    </Button>
-                  )
+                return (
+                  <Button
+                    key={page}
+                    id={page}
+                    onClick={handleCloseNavMenu}
+                    variant="text"
+                    sx={{
+                      my: 2,
+                      color: "white",
+                      display: "block",
+                      "&:hover": {
+                        backgroundColor: "primary.light",
+                        // transform: "scale(1.1)",
+                        translate: "0px -2px",
+                        transition: "all 0.15s ease-in-out",
+                      },
+                    }}
+                  >
+                    {page}
+                  </Button>
+                );
               })}
             </Box>
 

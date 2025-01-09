@@ -163,7 +163,7 @@ const TripCard = ({
                   Budget: ${budget}
                 </Typography>
               )}
-              {(events || [])?.slice(0, 2).map((event, index) => (
+              {(planData.events || [])?.slice(0, 2).map((event, index) => (
                 <Box key={index} sx={{ mb: 1 }}>
                   <Typography variant="subtitle2" color="text.secondary">
                     {new Date(event.start).toLocaleDateString()}
@@ -178,13 +178,13 @@ const TripCard = ({
                   </Typography>
                 </Box>
               ))}
-              {events?.length > 2 && (
+              {planData.events?.length > 2 && (
                 <Typography variant="body2" color="primary">
-                  +{events.length - 2} more events
+                  +{planData.events.length - 2} more events
                 </Typography>
               )}
             </CardContent>
-            <CardActions sx={{ p: 2, pt: 0 }}>
+            {/* <CardActions sx={{ p: 2, pt: 0 }}>
               <Button
                 variant="contained"
                 onClick={isAvailable ? () => {} : undefined}
@@ -194,7 +194,7 @@ const TripCard = ({
               >
                 {isAvailable ? "Add to trips" : "Share"}
               </Button>
-            </CardActions>
+            </CardActions> */}
           </>
         )}
       </Card>
