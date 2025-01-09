@@ -9,6 +9,7 @@ import cors from "cors";
 import Middleware from "./common/middleware/middleware";
 import { Controllers } from "./common/types/controllers";
 import TripController from "./trip/trip.controller";
+import path from "path";
 
 const app = express();
 config();
@@ -23,6 +24,13 @@ AppDataSource.initialize()
 .catch((err) => {
     console.error("[Error during Data Source initialization]", err);
 });
+
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(__dirname + "fronend/dist"))
+    app.get("*", function (req, res) {
+        res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+    });
+}
 
 // Middleware
 app.use((req: Request, res: Response, next: NextFunction) => methodsBind([new Middleware(req, res, next)]));
