@@ -7,6 +7,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import TripCard from "../components/TripCard";
 
 const SharedTripPage = () => {
   const { tripId } = useParams();
@@ -59,36 +60,7 @@ const SharedTripPage = () => {
     <Box p={4}>
       {trip && (
         <>
-          <Typography variant="h4" gutterBottom>
-            {trip.tripName}
-          </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            Location: {trip.location}
-          </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            Dates: {new Date(trip.fromDate).toLocaleDateString()} -{" "}
-            {new Date(trip.toDate).toLocaleDateString()}
-          </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            Budget: ${trip.budget}
-          </Typography>
-
-          <Box mt={4}>
-            <Typography variant="h5" gutterBottom>
-              Trip Itinerary
-            </Typography>
-            <FullCalendar
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              initialView="timeGridDay"
-              events={trip.events}
-              headerToolbar={{
-                left: "prev,next today",
-                center: "title",
-                right: "dayGridMonth,timeGridWeek,timeGridDay",
-              }}
-              height="auto"
-            />
-          </Box>
+          <TripCard isAvailable={true} {...trip} />
         </>
       )}
     </Box>

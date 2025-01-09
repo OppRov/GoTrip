@@ -14,9 +14,17 @@ import {
   TextField,
   Link,
   Snackbar,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
+import axiosFetch from "../api/axiosFetch";
+import { TRIPS_URL } from "../../constants/endpoints";
 
 const TripCard = ({
   _id,
@@ -31,10 +39,14 @@ const TripCard = ({
   isAvailable = true,
   ratingCount,
   planData,
+  onDelete,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [openShareModal, setOpenShareModal] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const navigate = useNavigate();
+  const { fetchData } = axiosFetch();
 
   const handleOpenShare = () => {
     setOpenShareModal(true);
@@ -54,6 +66,44 @@ const TripCard = ({
       return;
     }
     setOpenSnackbar(false);
+  };
+
+  const handleDeleteTrip = () => {
+    onDelete(_id);
+    setOpenDeleteDialog(false);
+  };
+
+  const handleAddToTrips = async () => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    if (!userInfo) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const tripData = {
+        userID: userInfo.id,
+        tripName: displayTripName,
+        destination: location,
+        startDate: fromDate,
+        endDate: toDate,
+        budget: budget,
+        events: events,
+        image: displayImage,
+      };
+
+      await fetchData({
+        url: TRIPS_URL,
+        method: "POST",
+        body: JSON.stringify(tripData),
+        token: localStorage.getItem("token"),
+      });
+
+      // Trip added successfully, perform any necessary actions
+      console.log("Trip added successfully");
+    } catch (error) {
+      console.error("Error adding trip:", error);
+    }
   };
 
   const displayImage = preview
@@ -152,9 +202,9 @@ const TripCard = ({
                 variant="h6"
                 color="text.secondary"
                 gutterBottom
-                noWrap
+                // noWrap
               >
-                {location}
+                Destination: {location}
               </Typography>
               <Typography variant="body2" color="text.secondary" gutterBottom>
                 {fromDate && toDate ? (
@@ -195,13 +245,18 @@ const TripCard = ({
             <CardActions sx={{ p: 2, pt: 0 }}>
               <Button
                 variant="contained"
-                onClick={handleOpenShare}
+                onClick={isAvailable ? handleAddToTrips : handleOpenShare}
                 fullWidth
                 size="small"
-                // disabled={!isAvailable}
               >
                 {isAvailable ? "Add to trips" : "Share"}
               </Button>
+              <IconButton
+                aria-label="delete"
+                onClick={() => setOpenDeleteDialog(true)}
+              >
+                {!isAvailable && <DeleteIcon />}
+              </IconButton>
             </CardActions>
           </Collapse>
         )}
@@ -212,9 +267,9 @@ const TripCard = ({
                 variant="h6"
                 color="text.secondary"
                 gutterBottom
-                noWrap
+                // noWrap
               >
-                {location}
+                Destination: {location}
               </Typography>
               <Typography variant="body2" color="text.secondary" gutterBottom>
                 {fromDate && toDate ? (
@@ -266,6 +321,22 @@ const TripCard = ({
           </>
         )}
       </Card>
+
+      <Dialog
+        open={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+      >
+        <DialogTitle>Delete Trip</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to delete this trip?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDeleteDialog(false)}>Cancel</Button>
+          <Button onClick={handleDeleteTrip} color="error">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 };

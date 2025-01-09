@@ -15,7 +15,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import Grid from "@mui/material/Grid2";
 import { Button, Container } from "@mui/material";
 import TripCard from "../components/TripCard";
@@ -36,27 +36,51 @@ const TripListPage = () => {
 
   useEffect(() => {
     fetchData({
-        url: `${TRIPS_URL}/getAllTripsUser/${userInfo?.id}`,
-        method: "GET",
-        token: localStorage.getItem("token"),
-    })
+      url: `${TRIPS_URL}/getAllTripsUser/${userInfo?.id}`,
+      method: "GET",
+      token: localStorage.getItem("token"),
+    });
   }, []);
 
   useEffect(() => {
     if (!loading && !error && data) {
-        console.log(data.data);
+      console.log(data.data);
       setTrips(data.data);
     }
   }, [data, loading, error]);
 
+  const handleDeleteTrip = async (tripId) => {
+    try {
+      await fetchData({
+        url: `${TRIPS_URL}/${tripId}`,
+        method: "DELETE",
+        token: localStorage.getItem("token"),
+      });
+      setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripId));
+    } catch (error) {
+      console.error("Error deleting trip:", error);
+    }
+  };
+
   return (
     <Container sx={{ mt: "1rem" }}>
-        <Button variant="contained" sx={{ borderRadius: "10px", height: "40px", marginLeft: "55rem" }} onClick={() => nav("/planner")}>
-            Create a new Trip <AddIcon />
-         </Button>
+      <Button
+        variant="contained"
+        sx={{ borderRadius: "10px", height: "40px", marginLeft: "55rem" }}
+        onClick={() => nav("/planner")}
+      >
+        Create a new Trip <AddIcon />
+      </Button>
       <Grid container spacing={5} marginTop="10px">
         {trips.map((value, index) => {
-          return <TripCard key={index} {...value} isAvailable={false} />;
+          return (
+            <TripCard
+              key={index}
+              {...value}
+              isAvailable={false}
+              onDelete={handleDeleteTrip}
+            />
+          );
         })}
       </Grid>
     </Container>

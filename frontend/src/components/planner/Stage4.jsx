@@ -75,7 +75,7 @@ const Stage4 = () => {
         p: 2,
       }}
     >
-      <Typography variant="h5">Save Your Trip</Typography>
+      <Typography variant="h5">Save Your Trip!</Typography>
 
       <TextField
         fullWidth

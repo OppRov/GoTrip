@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../hooks/useUserContext";
 
 const pages = ["My Trips"];
-const settings = ["Profile", "Account", "Logout"];
+const settings = ["Logout"];
 const logging = ["Login", "Register"];
 
 function ResponsiveAppBar() {

@@ -32,7 +32,7 @@ const Stage3 = () => {
 
   return (
     <>
-      <Typography variant="h4">Stage 3</Typography>
+      <Typography variant="h4">Route Overview</Typography>
       <MapDisplay />
     </>
   );
