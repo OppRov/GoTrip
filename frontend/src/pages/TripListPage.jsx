@@ -17,22 +17,19 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AddIcon from '@mui/icons-material/Add';
 import Grid from "@mui/material/Grid2";
-import { Button, Container } from "@mui/material";
+import { Button, Container, TextField } from "@mui/material";
 import TripCard from "../components/TripCard";
 import { useNavigate } from "react-router-dom";
 
 const TripListPage = () => {
-  const [trips, setTrips] = useState([]);
+
+    const [trips, setTrips] = useState([]);
+    const [searchValue, setSearchValue] = useState('');
+
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const nav = useNavigate();
 
   const { data, loading, error, fetchData } = axiosFetch();
-
-  const handleExpandClick = (i) => {
-    let newArrTrips = [...trips];
-    newArrTrips[i] = !trips[i];
-    setTrips(newArrTrips);
-  };
 
   useEffect(() => {
     fetchData({
@@ -49,11 +46,29 @@ const TripListPage = () => {
     }
   }, [data, loading, error]);
 
+    useEffect(() => {
+        const newTrips = trips.filter((trip) => {
+            const filterd = trip.tripName.toString().toLowerCase().includes(searchValue.toString().toLowerCase());
+            console.log("SEARCH_VALUE:", searchValue);
+            return filterd;
+        });
+        setTrips(newTrips);
+        if (!searchValue) {
+            fetchData({
+                url: `${TRIPS_URL}/getAllTripsUser/${userInfo?.id}`,
+                method: "GET",
+                token: localStorage.getItem("token"),
+            })
+        }
+    }, [searchValue]);
+
   return (
     <Container sx={{ mt: "1rem" }}>
-        <Button variant="contained" sx={{ borderRadius: "10px", height: "40px", marginLeft: "55rem" }} onClick={() => nav("/planner")}>
-            Create a new Trip <AddIcon />
-         </Button>
+
+      <TextField placeholder="Search Trip Name" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} variant="outlined"/>
+      <Button variant="contained" sx={{ borderRadius: "10px", height: "40px", marginLeft: "55rem" }} onClick={() => nav("/planner")}>
+          Create a new Trip <AddIcon />
+      </Button>
       <Grid container spacing={5} marginTop="10px">
         {trips.map((value, index) => {
           return <TripCard key={index} {...value} isAvailable={false} />;

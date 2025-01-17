@@ -40,7 +40,7 @@ const AppRoutes = () => {
                 path={PLANNER_ROUTE}
                 element={
                     <PlanProvider>
-                    <TripPlanPage />
+                        <TripPlanPage/>
                     </PlanProvider>
                 }
                 />

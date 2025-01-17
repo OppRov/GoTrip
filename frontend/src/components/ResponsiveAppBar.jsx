@@ -30,7 +30,6 @@ function ResponsiveAppBar() {
   const { user, setUser } = useUserContext();
 
   useEffect(() => {
-    console.log("USER", user);
     if (user?.role === "admin") pages.push("admin panel");
   }, [user]);
 
