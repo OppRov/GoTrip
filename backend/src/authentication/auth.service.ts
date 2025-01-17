@@ -38,8 +38,8 @@ class AuthService {
                 email: user.email,
                 password: user.password
             };
-            const privateKey: string = process.env.TOKEN_SECRET_KEY!;
-            token = sign(userCredentials, privateKey, { algorithm: "RS512",expiresIn: "1d" });
+            const secretKey: string = process.env.TOKEN_SECRET_KEY!;
+            token = sign(userCredentials, secretKey, { expiresIn: "1d" });
             if (typeof token !== "string" && !token) {
                 credentialsStatus.emailOK = false;
                 credentialsStatus.passwordOK = false;

@@ -4,7 +4,7 @@ import { HttpStatus } from "../common/enums/http-status";
 import { InnerResponse } from "../common/interfaces/response.interface";
 import { Trip } from "../db/db-entities/trip.entity";
 import { isArray, isString } from "class-validator";
-import { GooglePlacesResponse } from "./trip.interface";
+import { GooglePlacesResponse, WeatherData } from "./trip.interface";
 
 class TripController {
 
@@ -124,6 +124,25 @@ class TripController {
                 res.status(this.innerResponse.status = HttpStatus.OK).send(this.innerResponse);
             } catch (err) {
                 this.innerResponse.message = err?.toString()!;
+                this.innerResponse.data = null;
+                res.status(this.innerResponse.status = HttpStatus.NOT_FOUND).send(this.innerResponse);
+            }
+        });
+    }
+
+    public getWeather():void {
+        this.app.get(`/${this.ROUTE_NAME}/getWeather/:cityName`, async (req: Request, res: Response) => {
+            try {
+                if (!req.params.cityName) throw new Error("There is no city name");
+                const weatherData: boolean | WeatherData = await this.service.getWeather(req.params.cityName);
+                if (typeof weatherData === "boolean") throw new Error("An error occurred, please check your city name.");
+                if (parseInt(weatherData.cod.toString()) === 404) throw new Error(weatherData?.message);
+                this.innerResponse.data = weatherData;
+                this.innerResponse.message = "Success";
+                res.status(this.innerResponse.status = HttpStatus.OK).send(this.innerResponse);
+            } catch (error) {
+                console.log(error);
+                this.innerResponse.message = error?.toString()!;
                 this.innerResponse.data = null;
                 res.status(this.innerResponse.status = HttpStatus.NOT_FOUND).send(this.innerResponse);
             }

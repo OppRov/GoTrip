@@ -1,9 +1,8 @@
-// /* eslint-disable */
 import { useEffect, useState } from "react";
 import axiosFetch from "../api/axiosFetch.js";
 import { TRIPS_URL } from "../../constants/endpoints";
-import { Button, Container, Paper } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { Alert, Button, Container, Paper, Snackbar } from '@mui/material';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 export default function AdminPanel() {
 
@@ -12,6 +11,11 @@ export default function AdminPanel() {
     const [isChecked, setIsChecked] = useState(true);
     const [selectedRow, setSelectedRow] = useState();
     const [newRatingCount, setNewRatingCount] = useState(0);
+    const [isSnackbarOpen, setIsSnackbarOpen] = useState({
+      message: '',
+      status: 0,
+      data: false
+    });
 
     useEffect(() => {
       fetchData({
@@ -65,24 +69,48 @@ export default function AdminPanel() {
         });
         const dJSON = await d.json();
         console.log(dJSON);
-        // if (!loading && !error && data) console.log(data);
+        if (dJSON.status === 201) setIsSnackbarOpen({
+          message: dJSON.message,
+          status: dJSON.status,
+          data: dJSON.data
+        });
     };
+
     return (
         <Container sx={ { display: "flex", flexDirection: "column", justifyContent: "space-evenly", height: 800 } }>
+            <Snackbar
+                open={isSnackbarOpen.data}
+                autoHideDuration={2000}
+                onClose={() => setIsSnackbarOpen({ ...isSnackbarOpen, data: false })}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+                    <Alert
+                      onClose={() => setIsSnackbarOpen({ ...isSnackbarOpen, data: false })}
+                      severity={isSnackbarOpen.status === 201 ? "success" : "error"}
+                      variant="filled"
+                      sx={{ width: "100%" }}>
+                      {isSnackbarOpen.message}
+                    </Alert>
+                  </Snackbar>
             <Paper>
                 <DataGrid
-                rows={trips}
-                columns={columns}
-                initialState={{ pagination: { paginationModel } }}
-                pageSizeOptions={[5, 10]}
-                checkboxSelection={false}
-                sx={{ border: 0, width: "100%" }}
-                checked={isChecked}
-                onRowSelectionModelChange={(ids) => {
-                  const selectedRowData = trips.filter((row) => ids.includes(row.id));
-                  if (!selectedRow) setNewRatingCount(selectedRowData[0].ratingCount + 1);
-                  setSelectedRow(selectedRowData[0]);
-                }}
+                    rows={trips}
+                    columns={columns}
+                    initialState={{ pagination: { paginationModel } }}
+                    pageSizeOptions={[5, 10]}
+                    checkboxSelection={false}
+                    sx={{ border: 0, width: "100%" }}
+                    checked={isChecked}
+                    onRowSelectionModelChange={(ids) => {
+                    const selectedRowData = trips.filter((row) => ids.includes(row.id));
+                    if (!selectedRow) setNewRatingCount(selectedRowData[0].ratingCount + 1);
+                    setSelectedRow(selectedRowData[0]);
+                    }}
+                    slots={{ toolbar: GridToolbar }}
+                    slotProps={{
+                      toolbar: {
+                        showQuickFilter: true,
+                      },
+                    }}
                 />
             </Paper>
 

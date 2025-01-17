@@ -3,7 +3,7 @@ node_modules
 dist
 package-lock.json
 
-TODO.txt
+../TODO.txt
 RSA-keys
 
 .DS_store
