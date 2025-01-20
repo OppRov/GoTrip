@@ -126,7 +126,7 @@ class TripService {
 
     public async getWeather(cityName: string): Promise<WeatherData | boolean> {
         try {
-            if (!cityName) throw new Error();
+            if (!cityName) return false;
             const weather: Response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${process.env.WEATHER_API_KEY}`);
             const weatherJSON: WeatherData = await weather.json();
             if (!isObject<WeatherData>(weatherJSON)) return false;
@@ -138,6 +138,18 @@ class TripService {
         }
     }
 
+    public async deleteTrip(tripID: string): Promise<Trip | boolean> {
+        try {
+            if (!tripID) return false;
+            const trip: Trip | null = await this.manager.findOne<Trip>(Trip, { where: { _id: new ObjectId(tripID) as any } });
+            const deletedTrip: Trip | null = await this.manager.remove(Trip, trip);
+            if (!deletedTrip) return false;
+            return deletedTrip;
+        } catch (error) {
+            console.log(error);
+            return false
+        }
+    }
 }
 
 export default TripService;
