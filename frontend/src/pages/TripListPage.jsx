@@ -1,20 +1,6 @@
 import { useEffect, useState } from "react";
 import axiosFetch from "../api/axiosFetch";
 import { TRIPS_URL } from "../../constants/endpoints";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AddIcon from '@mui/icons-material/Add';
 import Grid from "@mui/material/Grid2";
 import { Button, Container, TextField } from "@mui/material";
@@ -64,7 +50,6 @@ const TripListPage = () => {
 
   return (
     <Container sx={{ mt: "1rem" }}>
-
       <TextField placeholder="Search Trip Name" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} variant="outlined"/>
       <Button variant="contained" sx={{ borderRadius: "10px", height: "40px", marginLeft: "55rem" }} onClick={() => nav("/planner")}>
           Create a new Trip <AddIcon />
