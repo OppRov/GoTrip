@@ -14,9 +14,11 @@ import {
   TextField,
   Link,
   Snackbar,
+  Rating
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { TRIPS_URL } from "../../constants/endpoints";
 
 const TripCard = ({
   _id,
@@ -31,10 +33,15 @@ const TripCard = ({
   isAvailable = true,
   ratingCount,
   planData,
+  userID,
+  rating
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [openShareModal, setOpenShareModal] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState({
+    message: "Link copied to clipboard",
+    data: false
+  });
 
   const handleOpenShare = () => {
     setOpenShareModal(true);
@@ -46,20 +53,49 @@ const TripCard = ({
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(`https://example.com/trip/${_id}`);
-    setOpenSnackbar(true);
+    "Link copied to clipboard"
+    setOpenSnackbar({
+        message: "Link copied to clipboard",
+        data: true
+    });
   };
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-    setOpenSnackbar(false);
+    setOpenSnackbar({
+        message: "Link copied to clipboard",
+        data: false
+    });
   };
 
   const displayImage = preview
     ? planData?.image || "https://placehold.co/345x140/e0e0e0/ffffff"
     : imageTrip;
   const displayTripName = preview || !tripName ? planData?.tripName : tripName;
+
+  const onSelectRatingTrip = async (e) => {
+      const tripData = {
+          _id: _id,
+          userID: userID,
+          rating: e.target.value
+      };
+      const d = await fetch(TRIPS_URL, {
+          method: "PUT",
+          body: JSON.stringify(tripData),
+          headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem("token")}`
+          }
+      });
+      const dJSON = await d.json();
+      console.log(dJSON);
+      if (dJSON.status === 201) setOpenSnackbar({
+        message: dJSON.message,
+        data: dJSON.data
+      });
+  };
 
   return (
     <Paper elevation={3} sx={{ width: "300px" }}>
@@ -102,10 +138,10 @@ const TripCard = ({
       </Modal>
 
       <Snackbar
-        open={openSnackbar}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackbar}
-        message="Link copied to clipboard"
+            open={openSnackbar.data}
+            autoHideDuration={3000}
+            onClose={handleCloseSnackbar}
+            message={openSnackbar.message}
       />
 
       <Card
@@ -193,6 +229,7 @@ const TripCard = ({
               )}
             </CardContent>
             <CardActions sx={{ p: 2, pt: 0 }}>
+              <Rating onChange={onSelectRatingTrip} value={parseFloat(rating)}/>
               <Button
                 variant="contained"
                 onClick={handleOpenShare}
