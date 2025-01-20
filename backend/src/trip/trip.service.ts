@@ -1,12 +1,12 @@
 import { Events } from "../common/interfaces/events.interface";
 import { EntityManager, FindManyOptions, Entity } from "typeorm";
-import { isDateString, isEmpty, isString } from "class-validator";
+import { isDateString, isEmpty, isString, isObject } from "class-validator";
 import validateObject from "../common/utils/validateObject";
 import { Trip } from "../db/db-entities/trip.entity";
 import { AppDataSource } from "../db/db-config";
 import { ObjectId } from "mongodb";
 import { customsearch_v1, google } from "googleapis";
-import { PlaceDTO, GooglePlacesResponse } from "./trip.interface";
+import { PlaceDTO, GooglePlacesResponse, WeatherData } from "./trip.interface";
 
 class TripService {
     manager: EntityManager;
@@ -121,6 +121,20 @@ class TripService {
         } catch (err) {
             console.warn(err);
             return [];
+        }
+    }
+
+    public async getWeather(cityName: string): Promise<WeatherData | boolean> {
+        try {
+            if (!cityName) throw new Error();
+            const weather: Response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${process.env.WEATHER_API_KEY}`);
+            const weatherJSON: WeatherData = await weather.json();
+            if (!isObject<WeatherData>(weatherJSON)) return false;
+            if (weatherJSON.cod === 404) return false;
+            return weatherJSON;
+        } catch (error) {
+            console.log(error);
+            return false
         }
     }
 

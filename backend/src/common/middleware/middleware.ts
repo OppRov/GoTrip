@@ -17,7 +17,7 @@ class Middleware {
 
     public authMiddleware(): void {
         const token: string = this.req.headers.authorization?.split(' ')[1] || '';
-        const publicKey: string = readFileSync("RSA-keys/public.crt", "utf8");
+        const secretKey: string = process.env.TOKEN_SECRET_KEY!;
         const publicRouts: string[] = [
             "/auth/signIn",
             "/auth/signUp",
@@ -25,7 +25,7 @@ class Middleware {
         ];
         try {
             const route = publicRouts.find((route: string) => this.req.originalUrl.startsWith(route));
-            if (route || verify(token, publicKey)) return this.next();
+            if (route || verify(token, secretKey)) return this.next();
         } catch(error: any) {
             const response: InnerResponse = {
                 message: "ERROR: [UNAUTHORIZED]",
