@@ -148,6 +148,24 @@ class TripController {
             }
         });
     }
+
+    public deleteTrip(): void {
+        this.app.delete(`/${this.ROUTE_NAME}/deleteTrip/:id`, async (req: Request, res: Response) => {
+            try {
+                if (!req.params.id) throw new Error("There is no TripId");
+                const deletedTrip: Trip | boolean = await this.service.deleteTrip(req.params.id);
+                if (typeof deletedTrip === "boolean") throw new Error("An error occurred");
+                this.innerResponse.data = deletedTrip;
+                this.innerResponse.message = "Success";
+                res.status(this.innerResponse.status = HttpStatus.OK).send(this.innerResponse);
+            } catch (error) {
+                console.log(error);
+                this.innerResponse.message = error?.toString()!;
+                this.innerResponse.data = null;
+                res.status(this.innerResponse.status = HttpStatus.NOT_FOUND).send(this.innerResponse);
+            }
+        });
+    }
 }
 
 export default TripController;
