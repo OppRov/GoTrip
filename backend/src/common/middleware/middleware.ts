@@ -3,6 +3,7 @@ import { readFileSync } from "fs";
 import { verify } from "jsonwebtoken";
 import { HttpStatus } from "../enums/http-status";
 import { InnerResponse } from "../interfaces/response.interface";
+import { publicca } from "googleapis/build/src/apis/publicca";
 
 class Middleware {
     req: Request;

@@ -60,6 +60,7 @@ const Stage4 = () => {
         recommended: false,
         ratingCount: 0,
         imageTrip: planData.image,
+        rating: 0
       },
     });
   };
