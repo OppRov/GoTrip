@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosFetch from "../api/axiosFetch.js";
 import { TRIPS_URL } from "../../constants/endpoints";
-import { Alert, Button, Container, Paper, Snackbar } from '@mui/material';
+import { Alert, Button, Container, Paper, Snackbar, Typography } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 export default function AdminPanel() {
@@ -90,7 +90,10 @@ export default function AdminPanel() {
                       sx={{ width: "100%" }}>
                       {isSnackbarOpen.message}
                     </Alert>
-                  </Snackbar>
+            </Snackbar>
+            <Typography fontSize="1.5rem">
+                Here you can select the trip that will be displayed to users as recommended trips✨
+            </Typography>
             <Paper>
                 <DataGrid
                     rows={trips}
