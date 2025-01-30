@@ -28,7 +28,6 @@ import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { useNavigate } from "react-router-dom";
 import axiosFetch from "../api/axiosFetch";
 import { TRIPS_URL } from "../../constants/endpoints";
-import { TRIPS_URL } from "../../constants/endpoints";
 
 const TripCard = ({
   _id,
