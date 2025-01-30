@@ -18,10 +18,12 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Stack,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { useNavigate } from "react-router-dom";
 import axiosFetch from "../api/axiosFetch";
 import { TRIPS_URL } from "../../constants/endpoints";
@@ -111,6 +113,14 @@ const TripCard = ({
     : imageTrip;
   const displayTripName = preview || !tripName ? planData?.tripName : tripName;
 
+  const handleWhatsappShare = () => {
+    const message = encodeURIComponent(
+      `Check out this trip: https://example.com/trip/${_id}`,
+    );
+    const url = `https://api.whatsapp.com/send?text=${message}`;
+    window.open(url, "_blank");
+  };
+
   return (
     <Paper elevation={3} sx={{ width: "300px" }}>
       <Modal open={openShareModal} onClose={() => setOpenShareModal(false)}>
@@ -130,24 +140,42 @@ const TripCard = ({
           <Typography variant="h6" gutterBottom>
             Share Trip
           </Typography>
+          <Typography>
+            Share this link with others to invite them to view or collaborate on
+            this trip.
+          </Typography>
           <TextField
             label="Trip URL"
             value={`https://example.com/trip/${_id}`}
             fullWidth
             InputProps={{
               readOnly: true,
-              endAdornment: (
-                <IconButton edge="end" onClick={handleCopyLink}>
-                  <ContentCopyIcon />
-                </IconButton>
-              ),
+              // endAdornment: (
+              //   <IconButton edge="end" onClick={handleCopyLink}>
+              //     <ContentCopyIcon />
+              //   </IconButton>
+              // ),
             }}
-            sx={{ mb: 2 }}
+            sx={{ mt: 2 }}
           />
-          <Typography>
-            Share this link with others to invite them to view or collaborate on
-            this trip.
-          </Typography>
+          <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<WhatsAppIcon />}
+              onClick={handleWhatsappShare}
+            >
+              WhatsApp
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<ContentCopyIcon />}
+              onClick={handleCopyLink}
+            >
+              Copy Link
+            </Button>
+          </Stack>
         </Box>
       </Modal>
 
@@ -332,7 +360,13 @@ const TripCard = ({
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDeleteDialog(false)}>Cancel</Button>
-          <Button onClick={handleDeleteTrip} color="error">
+          <Button
+            onClick={() => {
+              setOpenDeleteDialog(false);
+              onDelete(_id);
+            }}
+            color="error"
+          >
             Delete
           </Button>
         </DialogActions>
