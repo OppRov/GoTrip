@@ -3,6 +3,7 @@ import { readFileSync } from "fs";
 import { verify } from "jsonwebtoken";
 import { HttpStatus } from "../enums/http-status";
 import { InnerResponse } from "../interfaces/response.interface";
+import { publicca } from "googleapis/build/src/apis/publicca";
 
 class Middleware {
     req: Request;
@@ -24,8 +25,7 @@ class Middleware {
             "/trips/getRecommendedTrips"
         ];
         try {
-            const route = publicRouts.find((route: string) => this.req.originalUrl.startsWith(route));
-            if (route || verify(token, secretKey)) return this.next();
+            if (publicRouts.includes(this.req.originalUrl) || verify(token, secretKey)) return this.next();
         } catch(error: any) {
             const response: InnerResponse = {
                 message: "ERROR: [UNAUTHORIZED]",

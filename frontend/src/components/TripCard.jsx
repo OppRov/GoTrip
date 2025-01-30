@@ -19,6 +19,7 @@ import {
   DialogContent,
   DialogActions,
   Stack,
+  Rating,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -26,6 +27,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { useNavigate } from "react-router-dom";
 import axiosFetch from "../api/axiosFetch";
+import { TRIPS_URL } from "../../constants/endpoints";
 import { TRIPS_URL } from "../../constants/endpoints";
 
 const TripCard = ({
@@ -42,10 +44,15 @@ const TripCard = ({
   ratingCount,
   planData,
   onDelete,
+  userID,
+  rating,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [openShareModal, setOpenShareModal] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState({
+    message: "Link copied to clipboard",
+    data: false,
+  });
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const navigate = useNavigate();
   const { fetchData } = axiosFetch();
@@ -60,14 +67,21 @@ const TripCard = ({
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(`https://example.com/trip/${_id}`);
-    setOpenSnackbar(true);
+    ("Link copied to clipboard");
+    setOpenSnackbar({
+      message: "Link copied to clipboard",
+      data: true,
+    });
   };
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-    setOpenSnackbar(false);
+    setOpenSnackbar({
+      message: "Link copied to clipboard",
+      data: false,
+    });
   };
 
   const handleDeleteTrip = () => {
@@ -119,6 +133,29 @@ const TripCard = ({
     );
     const url = `https://api.whatsapp.com/send?text=${message}`;
     window.open(url, "_blank");
+  };
+
+  const onSelectRatingTrip = async (e) => {
+    const tripData = {
+      _id: _id,
+      userID: userID,
+      rating: e.target.value,
+    };
+    const d = await fetch(TRIPS_URL, {
+      method: "PUT",
+      body: JSON.stringify(tripData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    const dJSON = await d.json();
+    console.log(dJSON);
+    if (dJSON.status === 201)
+      setOpenSnackbar({
+        message: dJSON.message,
+        data: dJSON.data,
+      });
   };
 
   return (
@@ -180,10 +217,10 @@ const TripCard = ({
       </Modal>
 
       <Snackbar
-        open={openSnackbar}
+        open={openSnackbar.data}
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
-        message="Link copied to clipboard"
+        message={openSnackbar.message}
       />
 
       <Card
@@ -271,6 +308,10 @@ const TripCard = ({
               )}
             </CardContent>
             <CardActions sx={{ p: 2, pt: 0 }}>
+              <Rating
+                onChange={onSelectRatingTrip}
+                value={parseFloat(rating)}
+              />
               <Button
                 variant="contained"
                 onClick={isAvailable ? handleAddToTrips : handleOpenShare}

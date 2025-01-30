@@ -48,4 +48,8 @@ export class Trip {
     @Column()
     @IsUrl()
     imageTrip: string;
+
+    @Column()
+    @IsNumber()
+    rating: number;
 }
