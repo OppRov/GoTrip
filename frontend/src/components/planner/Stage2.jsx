@@ -91,7 +91,7 @@ const Stage2 = () => {
             data-event={JSON.stringify({
               id: activity.id,
               title: activity.title,
-              duration: activity.duration,
+
               extendedProps: {
                 address: activity.address,
               },
@@ -109,9 +109,6 @@ const Stage2 = () => {
             <Typography>{activity.title}</Typography>
             <Typography variant="body2" color="text.secondary">
               {activity.address}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {activity.duration}
             </Typography>
             {activity.thumbnail && (
               <img

@@ -97,8 +97,8 @@ function ResponsiveAppBar() {
                 onClose={handleCloseNavMenu}
                 sx={{ display: { xs: "block", md: "none" } }}
               >
-                {pages.map((page) => (
-                  <MenuItem key={page} id={page} onClick={handleCloseNavMenu}>
+                {pages.map((page, i) => (
+                  <MenuItem key={i} id={page} onClick={handleCloseNavMenu}>
                     <Typography sx={{ textAlign: "center" }}>{page}</Typography>
                   </MenuItem>
                 ))}

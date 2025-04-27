@@ -56,6 +56,8 @@ const TripCard = ({
   const navigate = useNavigate();
   const { fetchData } = axiosFetch();
 
+  const SHARE_URL = `https://localhost:5173/shared/?tripId=${_id}`;
+
   const handleOpenShare = () => {
     setOpenShareModal(true);
   };
@@ -65,7 +67,7 @@ const TripCard = ({
   };
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(`https://example.com/trip/${_id}`);
+    navigator.clipboard.writeText(SHARE_URL);
     ("Link copied to clipboard");
     setOpenSnackbar({
       message: "Link copied to clipboard",
@@ -127,9 +129,7 @@ const TripCard = ({
   const displayTripName = preview || !tripName ? planData?.tripName : tripName;
 
   const handleWhatsappShare = () => {
-    const message = encodeURIComponent(
-      `Check out this trip: https://example.com/trip/${_id}`,
-    );
+    const message = encodeURIComponent(`Check out this trip: ${SHARE_URL}`);
     const url = `https://api.whatsapp.com/send?text=${message}`;
     window.open(url, "_blank");
   };
@@ -182,7 +182,7 @@ const TripCard = ({
           </Typography>
           <TextField
             label="Trip URL"
-            value={`https://example.com/trip/${_id}`}
+            value={SHARE_URL}
             fullWidth
             InputProps={{
               readOnly: true,
