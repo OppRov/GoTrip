@@ -150,6 +150,31 @@ class TripService {
             return false
         }
     }
+
+    public async duplicateTripForUser(tripID: string, newUserID: string): Promise<Trip | boolean> {
+        try {
+            const originalTrip: Trip | boolean = await this.findOneTrip(tripID);
+            if (!originalTrip || typeof originalTrip === "boolean") return false;
+
+            // Create a deep copy without _id
+            const newTrip: Trip = { ...originalTrip };
+            delete (newTrip as any)._id;
+
+            // Assign new userID
+            newTrip.userID = newUserID;
+
+            // Optional: Reset fields like ratingCount or timestamps
+            newTrip.ratingCount = 0;
+
+            // Save the new trip
+            const createdTrip = this.manager.create<Trip, Trip>(Trip, newTrip);
+            await this.manager.save(createdTrip);
+            return createdTrip;
+        } catch (err) {
+            console.error("Error duplicating trip:", err);
+            return false;
+        }
+    }
 }
 
 export default TripService;

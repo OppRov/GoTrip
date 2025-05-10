@@ -166,6 +166,26 @@ class TripController {
             }
         });
     }
+
+    public duplicateTripForUser(): void {
+        this.app.post(`/${this.ROUTE_NAME}/duplicateTripForUser`, async (req: Request, res: Response) => {
+            try {
+                const { tripID, userID } = req.body;
+                if (!tripID || !userID) throw new Error("Trip ID or User ID is missing");
+
+                const result: Trip | boolean = await this.service.duplicateTripForUser(tripID, userID);
+                if (!result || typeof result === "boolean") throw new Error("Failed to duplicate trip for user");
+
+                this.innerResponse.data = result;
+                this.innerResponse.message = "Trip duplicated and assigned to user";
+                res.status(this.innerResponse.status = HttpStatus.CREATED).send(this.innerResponse);
+            } catch (error) {
+                this.innerResponse.message = error?.toString()!;
+                this.innerResponse.data = null;
+                res.status(this.innerResponse.status = HttpStatus.BAD_REQUEST).send(this.innerResponse);
+            }
+        });
+    }
 }
 
 export default TripController;
