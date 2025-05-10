@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../contexts/userContext";
@@ -7,6 +7,7 @@ import axios from "axios";
 const SharePage = () => {
   const nav = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   //check if user is logged in by checking the local storage:
 
   const user = useContext(userContext);
@@ -20,9 +21,12 @@ const SharePage = () => {
     try {
       const response = await axios.post("/api/trip/addTrip", {
         tripId,
+        userId: user.id,
       });
+      console.log(response);
     } catch (error) {
       console.log(error);
+      setError(error);
     }
   };
 
@@ -30,6 +34,7 @@ const SharePage = () => {
     nav("/login");
   }
 
+  //this is to redirect the user to the home page when the trip is added
   useEffect(() => {
     if (!loading) {
       console.log("test");
@@ -47,7 +52,7 @@ const SharePage = () => {
     <>
       {loading ? (
         <Typography>Loading...</Typography>
-      ) : (
+      ) : !error ? (
         <Stack
           width={"100%"}
           height={"100%"}
@@ -55,7 +60,10 @@ const SharePage = () => {
           justifyContent={"center"}
         >
           <Typography>Hooray! Your trip has been added!</Typography>
+          <Button onClick={() => nav("/trips")}>View Trips</Button>
         </Stack>
+      ) : (
+        <Typography>Something went wrong!</Typography>
       )}
     </>
   );

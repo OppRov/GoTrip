@@ -5,6 +5,10 @@ export const userContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
   // Retrieve user from local storage on component mount (page refresh)
   useEffect(() => {
     if (localStorage.getItem("userInfo")) {

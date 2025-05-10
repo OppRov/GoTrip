@@ -30,8 +30,8 @@ const AppRoutes = () => {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/shared/*" element={<SharePage />} />
           <Route path="/" element={<ResponsiveAppBar />}>
+            <Route path="/shared/*" element={<SharePage />} />
             <Route path={HOME_ROUTE} element={<HomePage />} />
             <Route path={LOGIN_ROUTE} element={<LoginForm />} />
             <Route path={SIGNUP_ROUTE} element={<SignupForm />} />

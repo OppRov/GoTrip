@@ -56,7 +56,7 @@ const TripCard = ({
   const navigate = useNavigate();
   const { fetchData } = axiosFetch();
 
-  const SHARE_URL = `https://localhost:5173/shared/?tripId=${_id}`;
+  const SHARE_URL = `localhost:5173/shared/?tripId=${_id}`;
 
   const handleOpenShare = () => {
     setOpenShareModal(true);
@@ -156,6 +156,8 @@ const TripCard = ({
         data: dJSON.data,
       });
   };
+
+  const handleShowMore = () => {};
 
   return (
     <Paper elevation={3} sx={{ width: "300px" }}>
@@ -285,7 +287,7 @@ const TripCard = ({
                   Budget: ${budget}
                 </Typography>
               )}
-              {(events || [])?.slice(0, 2).map((event, index) => (
+              {(events || [])?.map((event, index) => (
                 <Box key={index} sx={{ mb: 1 }}>
                   <Typography variant="subtitle2" color="text.secondary">
                     {new Date(event.start).toLocaleDateString()}
@@ -300,11 +302,6 @@ const TripCard = ({
                   </Typography>
                 </Box>
               ))}
-              {events?.length > 2 && (
-                <Typography variant="body2" color="primary">
-                  +{events.length - 2} more events
-                </Typography>
-              )}
             </CardContent>
             <CardActions sx={{ p: 2, pt: 0 }}>
               <Rating
