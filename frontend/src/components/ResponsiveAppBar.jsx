@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../hooks/useUserContext";
 
 const pages = ["My Trips"];
-const settings = ["Profile", "Account", "Logout"];
+const settings = ["Logout"];
 const logging = ["Login", "Register"];
 
 function ResponsiveAppBar() {
@@ -97,8 +97,8 @@ function ResponsiveAppBar() {
                 onClose={handleCloseNavMenu}
                 sx={{ display: { xs: "block", md: "none" } }}
               >
-                {pages.map((page) => (
-                  <MenuItem key={page} id={page} onClick={handleCloseNavMenu}>
+                {pages.map((page, i) => (
+                  <MenuItem key={i} id={page} onClick={handleCloseNavMenu}>
                     <Typography sx={{ textAlign: "center" }}>{page}</Typography>
                   </MenuItem>
                 ))}

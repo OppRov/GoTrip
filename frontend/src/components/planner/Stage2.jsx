@@ -23,11 +23,12 @@ const Stage2 = () => {
 
   useEffect(() => {
     if (!loading && !error && data) {
-      const formattedActivities = data.data.placesResult.map((place) => ({
+      const formattedActivities = data.data.placesResult.map((place, i) => ({
         id: place.place_id,
         title: place.name,
         duration: "01:00", // Default 1 hour duration
         address: place.formatted_address,
+        thumbnail: place.imagesUrls?.[0] || null,
       }));
       setActivities(formattedActivities);
     }
@@ -90,7 +91,7 @@ const Stage2 = () => {
             data-event={JSON.stringify({
               id: activity.id,
               title: activity.title,
-              duration: activity.duration,
+
               extendedProps: {
                 address: activity.address,
               },
@@ -109,6 +110,13 @@ const Stage2 = () => {
             <Typography variant="body2" color="text.secondary">
               {activity.address}
             </Typography>
+            {activity.thumbnail && (
+              <img
+                src={activity.thumbnail}
+                alt={activity.title}
+                style={{ maxWidth: "100px", maxHeight: "100px" }}
+              />
+            )}
           </Paper>
         ))}
       </Box>

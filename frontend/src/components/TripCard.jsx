@@ -14,10 +14,19 @@ import {
   TextField,
   Link,
   Snackbar,
-  Rating
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Stack,
+  Rating,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteIcon from "@mui/icons-material/Delete";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import { useNavigate } from "react-router-dom";
+import axiosFetch from "../api/axiosFetch";
 import { TRIPS_URL } from "../../constants/endpoints";
 
 const TripCard = ({
@@ -33,15 +42,21 @@ const TripCard = ({
   isAvailable = true,
   ratingCount,
   planData,
+  onDelete,
   userID,
-  rating
+  rating,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [openShareModal, setOpenShareModal] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState({
     message: "Link copied to clipboard",
-    data: false
+    data: false,
   });
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const navigate = useNavigate();
+  const { fetchData } = axiosFetch();
+
+  const SHARE_URL = `localhost:5173/shared/?tripId=${_id}`;
 
   const handleOpenShare = () => {
     setOpenShareModal(true);
@@ -52,11 +67,11 @@ const TripCard = ({
   };
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(`https://example.com/trip/${_id}`);
-    "Link copied to clipboard"
+    navigator.clipboard.writeText(SHARE_URL);
+    ("Link copied to clipboard");
     setOpenSnackbar({
-        message: "Link copied to clipboard",
-        data: true
+      message: "Link copied to clipboard",
+      data: true,
     });
   };
 
@@ -65,9 +80,47 @@ const TripCard = ({
       return;
     }
     setOpenSnackbar({
-        message: "Link copied to clipboard",
-        data: false
+      message: "Link copied to clipboard",
+      data: false,
     });
+  };
+
+  const handleDeleteTrip = () => {
+    onDelete(_id);
+    setOpenDeleteDialog(false);
+  };
+
+  const handleAddToTrips = async () => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    if (!userInfo) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const tripData = {
+        userID: userInfo.id,
+        tripName: displayTripName,
+        destination: location,
+        startDate: fromDate,
+        endDate: toDate,
+        budget: budget,
+        events: events,
+        image: displayImage,
+      };
+
+      await fetchData({
+        url: TRIPS_URL,
+        method: "POST",
+        body: JSON.stringify(tripData),
+        token: localStorage.getItem("token"),
+      });
+
+      // Trip added successfully, perform any necessary actions
+      console.log("Trip added successfully");
+    } catch (error) {
+      console.error("Error adding trip:", error);
+    }
   };
 
   const displayImage = preview
@@ -75,27 +128,36 @@ const TripCard = ({
     : imageTrip;
   const displayTripName = preview || !tripName ? planData?.tripName : tripName;
 
+  const handleWhatsappShare = () => {
+    const message = encodeURIComponent(`Check out this trip: ${SHARE_URL}`);
+    const url = `https://api.whatsapp.com/send?text=${message}`;
+    window.open(url, "_blank");
+  };
+
   const onSelectRatingTrip = async (e) => {
-      const tripData = {
-          _id: _id,
-          userID: userID,
-          rating: e.target.value
-      };
-      const d = await fetch(TRIPS_URL, {
-          method: "PUT",
-          body: JSON.stringify(tripData),
-          headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${localStorage.getItem("token")}`
-          }
-      });
-      const dJSON = await d.json();
-      console.log(dJSON);
-      if (dJSON.status === 201) setOpenSnackbar({
+    const tripData = {
+      _id: _id,
+      userID: userID,
+      rating: e.target.value,
+    };
+    const d = await fetch(TRIPS_URL, {
+      method: "PUT",
+      body: JSON.stringify(tripData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    const dJSON = await d.json();
+    console.log(dJSON);
+    if (dJSON.status === 201)
+      setOpenSnackbar({
         message: dJSON.message,
-        data: dJSON.data
+        data: dJSON.data,
       });
   };
+
+  const handleShowMore = () => {};
 
   return (
     <Paper elevation={3} sx={{ width: "300px" }}>
@@ -116,32 +178,50 @@ const TripCard = ({
           <Typography variant="h6" gutterBottom>
             Share Trip
           </Typography>
-          <TextField
-            label="Trip URL"
-            value={`https://example.com/trip/${_id}`}
-            fullWidth
-            InputProps={{
-              readOnly: true,
-              endAdornment: (
-                <IconButton edge="end" onClick={handleCopyLink}>
-                  <ContentCopyIcon />
-                </IconButton>
-              ),
-            }}
-            sx={{ mb: 2 }}
-          />
           <Typography>
             Share this link with others to invite them to view or collaborate on
             this trip.
           </Typography>
+          <TextField
+            label="Trip URL"
+            value={SHARE_URL}
+            fullWidth
+            InputProps={{
+              readOnly: true,
+              // endAdornment: (
+              //   <IconButton edge="end" onClick={handleCopyLink}>
+              //     <ContentCopyIcon />
+              //   </IconButton>
+              // ),
+            }}
+            sx={{ mt: 2 }}
+          />
+          <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<WhatsAppIcon />}
+              onClick={handleWhatsappShare}
+            >
+              WhatsApp
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<ContentCopyIcon />}
+              onClick={handleCopyLink}
+            >
+              Copy Link
+            </Button>
+          </Stack>
         </Box>
       </Modal>
 
       <Snackbar
-            open={openSnackbar.data}
-            autoHideDuration={3000}
-            onClose={handleCloseSnackbar}
-            message={openSnackbar.message}
+        open={openSnackbar.data}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        message={openSnackbar.message}
       />
 
       <Card
@@ -188,9 +268,9 @@ const TripCard = ({
                 variant="h6"
                 color="text.secondary"
                 gutterBottom
-                noWrap
+                // noWrap
               >
-                {location}
+                Destination: {location}
               </Typography>
               <Typography variant="body2" color="text.secondary" gutterBottom>
                 {fromDate && toDate ? (
@@ -207,7 +287,7 @@ const TripCard = ({
                   Budget: ${budget}
                 </Typography>
               )}
-              {(events || [])?.slice(0, 2).map((event, index) => (
+              {(events || [])?.map((event, index) => (
                 <Box key={index} sx={{ mb: 1 }}>
                   <Typography variant="subtitle2" color="text.secondary">
                     {new Date(event.start).toLocaleDateString()}
@@ -222,23 +302,26 @@ const TripCard = ({
                   </Typography>
                 </Box>
               ))}
-              {events?.length > 2 && (
-                <Typography variant="body2" color="primary">
-                  +{events.length - 2} more events
-                </Typography>
-              )}
             </CardContent>
             <CardActions sx={{ p: 2, pt: 0 }}>
-              <Rating onChange={onSelectRatingTrip} value={parseFloat(rating)}/>
+              <Rating
+                onChange={onSelectRatingTrip}
+                value={parseFloat(rating)}
+              />
               <Button
                 variant="contained"
-                onClick={handleOpenShare}
+                onClick={isAvailable ? handleAddToTrips : handleOpenShare}
                 fullWidth
                 size="small"
-                // disabled={!isAvailable}
               >
                 {isAvailable ? "Add to trips" : "Share"}
               </Button>
+              <IconButton
+                aria-label="delete"
+                onClick={() => setOpenDeleteDialog(true)}
+              >
+                {!isAvailable && <DeleteIcon />}
+              </IconButton>
             </CardActions>
           </Collapse>
         )}
@@ -249,9 +332,9 @@ const TripCard = ({
                 variant="h6"
                 color="text.secondary"
                 gutterBottom
-                noWrap
+                // noWrap
               >
-                {location}
+                Destination: {location}
               </Typography>
               <Typography variant="body2" color="text.secondary" gutterBottom>
                 {fromDate && toDate ? (
@@ -303,6 +386,28 @@ const TripCard = ({
           </>
         )}
       </Card>
+
+      <Dialog
+        open={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+      >
+        <DialogTitle>Delete Trip</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to delete this trip?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDeleteDialog(false)}>Cancel</Button>
+          <Button
+            onClick={() => {
+              setOpenDeleteDialog(false);
+              onDelete(_id);
+            }}
+            color="error"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 };

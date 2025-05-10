@@ -101,7 +101,7 @@ const Reccomendations = () => {
               <NavigateNextIcon fontSize="inherit" />
             </IconButton>
           </Box>
-          <div>{currentPage}</div>
+          {/* <div>{currentPage}</div> */}
         </Box>
       )}
     </>

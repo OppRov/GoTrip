@@ -354,21 +354,21 @@ const Stage1 = () => {
 
   const { data, loading, error, fetchData } = axiosFetch();
 
-  const getImages = async (destination) => {
-    await fetchData({
-      url: `${TRIPS_URL}/getGooglePlaces/${destination} skyline`,
-      method: "GET",
-      token: localStorage.getItem("token"),
-    });
-    setDestinationEntered(true);
-  };
+  // const getImages = async (destination) => {
+  //   await fetchData({
+  //     url: `${TRIPS_URL}/getGooglePlaces/${destination} skyline`,
+  //     method: "GET",
+  //     token: localStorage.getItem("token"),
+  //   });
+  //   setDestinationEntered(true);
+  // };
 
-  useEffect(() => {
-    if (!loading && !error && data) {
-      console.log(data.data.imageUrls[0]);
-      setPlanData({ ...planData, image: data.data.imageUrls[0] });
-    }
-  }, [data, loading, error]);
+  // useEffect(() => {
+  //   if (!loading && !error && data) {
+  //     console.log(data.data.imageUrls[0]);
+  //     setPlanData({ ...planData, image: data.data.imageUrls[0] });
+  //   }
+  // }, [data, loading, error]);
 
   const fetchWeather = async (city) => {
     try {
@@ -411,7 +411,7 @@ const Stage1 = () => {
         textAlign="center"
         marginBottom={2}
       >
-        Stage 1
+        Trip Destination & Duration
       </Typography>
       <Autocomplete
         onInputChange={handleDestinationChange}
