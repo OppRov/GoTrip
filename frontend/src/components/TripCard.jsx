@@ -28,6 +28,7 @@ import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { useNavigate } from "react-router-dom";
 import axiosFetch from "../api/axiosFetch";
 import { TRIPS_URL } from "../../constants/endpoints";
+import axios from "axios";
 
 const TripCard = ({
   _id,
@@ -109,12 +110,19 @@ const TripCard = ({
         image: displayImage,
       };
 
-      await fetchData({
-        url: TRIPS_URL,
-        method: "POST",
-        body: JSON.stringify(tripData),
-        token: localStorage.getItem("token"),
-      });
+      const response = await axios.post(
+        "http://localhost:3000/trips/duplicateTripForUser",
+        {
+          tripID: _id,
+          userID: JSON.parse(localStorage.getItem("userInfo")).id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      console.log(response);
 
       // Trip added successfully, perform any necessary actions
       console.log("Trip added successfully");

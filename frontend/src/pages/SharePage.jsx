@@ -15,20 +15,32 @@ const SharePage = () => {
   const query = window.location.search;
   const urlParams = new URLSearchParams(query);
   const tripId = urlParams.get("tripId");
-  console.log(tripId);
 
   const handleAddTrip = async () => {
     try {
-      const response = await axios.post("/api/trip/addTrip", {
-        tripId,
-        userId: user.id,
-      });
+      const response = await axios.post(
+        "http://localhost:3000/trips/duplicateTripForUser",
+        {
+          tripID: tripId,
+          userID: JSON.parse(localStorage.getItem("userInfo")).id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
       console.log(response);
+      setLoading(false);
     } catch (error) {
       console.log(error);
       setError(error);
     }
   };
+
+  useEffect(() => {
+    handleAddTrip();
+  }, []);
 
   if (!user) {
     nav("/login");
@@ -37,14 +49,7 @@ const SharePage = () => {
   //this is to redirect the user to the home page when the trip is added
   useEffect(() => {
     if (!loading) {
-      console.log("test");
-      setTimeout(() => {
-        nav("/");
-      }, 3000);
-    } else {
-      setTimeout(() => {
-        setLoading(false);
-      }, 3000);
+      nav("/trips");
     }
   }, [loading]);
 

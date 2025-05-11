@@ -168,10 +168,10 @@ const SignupForm = () => {
               required: "Password is required",
               //This pattern requires at least one lowercase letter, one uppercase letter, one number, one special character and at least 8 characters
               //The special character is optional but can only be one of: @$!%*?&
-              pattern: {
-                value: PWD_REGEX,
-                message: "Please enter a strong password",
-              },
+              // pattern: {
+              //   value: PWD_REGEX,
+              //   message: "Please enter a strong password",
+              // },
             })}
             error={errors.password ? true : false}
             helperText={errors.password?.message}
