@@ -41,6 +41,11 @@ const TripListPage = () => {
       })
       .then((res) => {
         console.log(res);
+        fetchData({
+          url: `${TRIPS_URL}/getAllTripsUser/${userInfo?.id}`,
+          method: "GET",
+          token: localStorage.getItem("token"),
+        });
       })
       .catch((err) => {
         console.log(err);

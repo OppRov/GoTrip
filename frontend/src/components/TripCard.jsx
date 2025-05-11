@@ -57,7 +57,7 @@ const TripCard = ({
   const navigate = useNavigate();
   const { fetchData } = axiosFetch();
 
-  const SHARE_URL = `localhost:5173/shared/?tripId=${_id}`;
+  const SHARE_URL = `http://localhost:5173/shared/?tripId=${_id}`;
 
   const handleOpenShare = () => {
     setOpenShareModal(true);
